@@ -1,19 +1,20 @@
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getFeed } from "utils";
-import { FeedType } from "types/feed";
-import { motion } from "framer-motion";
-import { FeedInput } from "~/components/feedInput";
+import type { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { getFeed } from 'utils';
+import { FeedType } from 'types/feed';
+import { motion } from 'framer-motion';
+import { FeedInput } from '~/components/feedInput';
+import { useRouter } from 'next/router';
 
 interface NextPageProps {
   feed: FeedType;
 }
 
 const Home: NextPage<NextPageProps> = ({ feed }) => {
-  const [feedURL, changeFeedUrl] = useState<string>("");
-
+  const [feedURL, changeFeedUrl] = useState<string>('');
+  const router = useRouter();
   const checkIfFeedIsExist = async () => {};
 
   const fetchFeed = async () => {
@@ -26,6 +27,9 @@ const Home: NextPage<NextPageProps> = ({ feed }) => {
     console.log(feed);
   }, [feed]);
 
+  useEffect(() => {
+    router.replace('/home');
+  }, []);
   return (
     <div className="bg-gray-700">
       <Head>
@@ -91,7 +95,7 @@ const Home: NextPage<NextPageProps> = ({ feed }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (_context) => {
-  const feed = await getFeed("http://rss.lizhi.fm/rss/74131208.xml");
+  const feed = await getFeed('http://rss.lizhi.fm/rss/74131208.xml');
 
   return {
     props: {
