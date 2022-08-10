@@ -9,6 +9,7 @@ const nextConfig = {
   },
   api: {
     responseLimit: false,
+    bodyParser: false,
   },
 };
 
