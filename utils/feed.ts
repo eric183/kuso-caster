@@ -1,5 +1,5 @@
-import axios from "axios";
-import Parser from "rss-parser";
+import axios from 'axios';
+import Parser from 'rss-parser';
 
 export const getFeed = async (url: string) => {
   const rssData = await axios.get(url, {

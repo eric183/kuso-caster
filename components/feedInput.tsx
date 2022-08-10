@@ -1,89 +1,113 @@
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import { FC, useEffect, useState } from "react";
-import { getFeed } from "utils";
-import { FeedType } from "types/feed";
-import { motion } from "framer-motion";
-import { Spin } from "./spin";
-import axios from "axios";
+import type { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
+import { SubscribeContext } from 'context/subscribe';
+import {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+import { getFeed } from 'utils';
+import { FeedType } from 'types/feed';
+import { motion } from 'framer-motion';
+import { Spin } from './spin';
+import axios from 'axios';
 
 interface NextPageProps {
   isOpen?: boolean;
   onClose?: () => void;
+  onSubscribe?: (data: any) => void;
 }
 
-// const FeedInput: FC<NextPageProps> = ({ feed }) => {
-const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
-  const [feedURL, changeFeedUrl] = useState<string>("");
-  const [feedInfo, changeFeedInfo] = useState<FeedType>(null!);
-  const [searchingStatus, changeSearchingStatus] = useState<
-    "ldle" | "searching" | "processing"
-  >("ldle");
+const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
+  const [feedURL, changeFeedUrl] = useState<string>('');
+  const [feedExist, changeFeedExist] = useState<boolean>(false);
+  const { feedInfo, subscribeDispatch } = useContext(SubscribeContext);
 
-  const checkIfFeedIsExist = async () => {
-    // console.log("checkIfFeedIsExist");
-  };
+  const [searchingStatus, changeSearchingStatus] = useState<
+    'ldle' | 'searching' | 'processing'
+  >('ldle');
 
   const fetchFeed = async () => {
-    const { data, status } = await axios("/api/feeds", {
-      method: "POST",
+    const { data, status } = await axios('/api/feed/getRSS', {
+      method: 'POST',
       data: {
         url: feedURL,
       },
     });
 
-    if (status !== 200) {
-      console.log("requeset not working");
-      changeSearchingStatus("ldle");
-      return;
+    changeSearchingStatus('processing');
+
+    switch (status) {
+      case 200:
+        {
+          if (data.exist) {
+            changeFeedExist(true);
+          }
+          subscribeDispatch({ type: 'MUTATION', payload: data.feedInfo });
+        }
+        break;
+      default: {
+        console.log('requeset not working');
+        resetHanler();
+      }
     }
-    // try {
-    //   {data, status} = await axios("/api/feeds", {
-    //     method: "POST",
-    //     data: {
-    //       url: feedURL,
-    //     },
-    //   });
-    // } catch (err: any) {
-    //   console.log(err.response.status);
-    //   changeSearchingStatus("ldle");
-    // }
-
-    checkIfFeedIsExist();
-
-    changeSearchingStatus("processing");
-
-    changeFeedInfo(data.feedInfo as FeedType);
-    console.log(data.feedInfo);
   };
 
-  useEffect(() => {}, [feedURL]);
+  const subscribeFeed = async () => {
+    if (feedExist) return;
+
+    const { data, status } = await axios('/api/feed/subscribe', {
+      method: 'POST',
+      data: { feedInfo },
+    });
+
+    if (status === 200) {
+      resetHanler();
+
+      onSubscribe && onSubscribe(data);
+
+      onClose && onClose();
+    }
+  };
+
+  const resetHanler = () => {
+    changeFeedExist(false);
+    changeFeedUrl('');
+    changeSearchingStatus('ldle');
+  };
+
+  useEffect(() => {
+    // console.log(feedInfo);
+  }, [feedInfo]);
   return (
     <motion.div
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 w-full h-full flex items-center justify-center"
       id="popup-modal"
       tabIndex={-1}
       initial={{
-        backgroundColor: "rgb(148 163 184 / 0)",
-        visibility: "hidden",
+        backgroundColor: 'rgb(148 163 184 / 0)',
+        visibility: 'hidden',
       }}
       transition={{ duration: 0.5 }}
-      animate={isOpen ? "open" : "closed"}
+      animate={isOpen ? 'open' : 'closed'}
       variants={{
         open: {
-          backgroundColor: "#94a3b847",
-          visibility: "visible",
+          backgroundColor: '#94a3b847',
+          visibility: 'visible',
         },
         closed: {
-          backgroundColor: "#94a3b800",
-          visibility: "hidden",
+          backgroundColor: '#94a3b800',
+          visibility: 'hidden',
         },
       }}
       onClick={(evt: any) => {
-        console.log(evt.target.parentElement.id);
-        if (evt.target.id === "popup-modal") {
+        if (evt.target.id === 'popup-modal') {
+          resetHanler();
           onClose && onClose();
         }
       }}
@@ -92,8 +116,8 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
         className="basis-5/12 relative"
         onSubmit={(evt: any) => {
           evt.preventDefault();
-
-          changeSearchingStatus("searching");
+          if (feedExist) return;
+          changeSearchingStatus('searching');
           fetchFeed();
         }}
       >
@@ -131,16 +155,16 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
             onInput={(e: any) => {
               changeFeedUrl(e.target.value);
               if (e.target.value.length === 0) {
-                changeSearchingStatus("ldle");
+                changeSearchingStatus('ldle');
                 return;
               }
-              if (searchingStatus !== "ldle") {
-                changeSearchingStatus("ldle");
+              if (searchingStatus !== 'ldle') {
+                changeSearchingStatus('ldle');
               }
             }}
           />
 
-          {searchingStatus === "ldle" && (
+          {searchingStatus === 'ldle' && (
             <motion.button
               type="submit"
               whileTap={{ scale: 0.9 }}
@@ -149,9 +173,9 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
               There You Go
             </motion.button>
           )}
-          {searchingStatus === "searching" && <Spin />}
+          {searchingStatus === 'searching' && <Spin />}
         </div>
-        {searchingStatus === "processing" && feedInfo && (
+        {searchingStatus === 'processing' && feedInfo && (
           <div className="w-full absolute left-0 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             {/* <a
                 href="#"
@@ -161,13 +185,24 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
                 {Profile}
               </a> */}
 
-            <div className="flex items-center py-2 px-4 w-full rounded-b-lg cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+            <div
+              onClick={() => {
+                subscribeFeed();
+              }}
+              className="flex items-center py-2 px-4 w-full rounded-b-lg cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+            >
               <motion.img
                 className="mr-3 rounded-md"
                 width={30}
                 src={feedInfo?.itunes?.image}
               ></motion.img>
               {feedInfo.title}
+
+              {feedExist && (
+                <div className="flex items-center ml-auto text-amber-300 font-extrabold">
+                  Already Exist
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -179,4 +214,4 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default FeedInput;
+export { FeedInput };

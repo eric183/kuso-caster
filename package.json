@@ -9,12 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.2.6",
+    "@portabletext/react": "^1.0.6",
+    "@sanity/base": "^2.30.4",
+    "@sanity/core": "^2.30.3",
+    "@sanity/default-layout": "^2.30.4",
+    "@sanity/default-login": "^2.30.4",
+    "@sanity/desk-tool": "^2.30.4",
+    "@sanity/eslint-config-studio": "^2.0.0",
+    "@sanity/image-url": "^1.0.1",
+    "@sanity/vision": "^2.30.4",
     "autoprefixer": "^10.4.8",
     "axios": "^0.27.2",
     "next": "12.2.3",
+    "next-sanity": "^0.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "rss-parser": "^3.12.0"
+    "rss-parser": "^3.12.0",
+    "smooth-scrollbar": "^8.7.5",
+    "uuidv4": "^6.2.13",
+    "zustand": "^4.0.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.9.3",

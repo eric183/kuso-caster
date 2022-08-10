@@ -8,6 +8,8 @@ export interface FeedType {
   guid: string;
   isoDate: string;
   itunes?: ItemItunes;
+  items?: Item[];
+  image?: string;
 }
 
 export interface Enclosure {
@@ -17,7 +19,7 @@ export interface Enclosure {
 }
 
 export enum Type {
-  AudioXM4A = "audio/x-m4a",
+  AudioXM4A = 'audio/x-m4a',
 }
 
 export interface ItemItunes {

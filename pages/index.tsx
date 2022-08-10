@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getFeed } from "utils";
 import { FeedType } from "types/feed";
 import { motion } from "framer-motion";
-import FeedInput from "~/components/feedInput";
+import { FeedInput } from "~/components/feedInput";
 
 interface NextPageProps {
   feed: FeedType;
@@ -26,7 +26,6 @@ const Home: NextPage<NextPageProps> = ({ feed }) => {
     console.log(feed);
   }, [feed]);
 
-  useEffect(() => {}, []);
   return (
     <div className="bg-gray-700">
       <Head>
