@@ -30,6 +30,13 @@ function runMiddleware(
   });
 }
 
+export const config = {
+  api: {
+    responseLimit: false,
+    bodyParser: false,
+  },
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
@@ -37,6 +44,8 @@ export default async function handler(
   >,
 ) {
   await runMiddleware(req, res, cors);
+  req.body.api.bodyParser = false;
+  req.body.api.responseLimit = false;
 
   const ifFeedExsit =
     (
