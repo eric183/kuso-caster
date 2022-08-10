@@ -4,11 +4,13 @@ import { usePlayerStore } from 'context/player';
 import { motion } from 'framer-motion';
 import {
   createElement,
+  FC,
   forwardRef,
   useEffect,
   useImperativeHandle,
   useRef,
 } from 'react';
+import { FeedType } from 'types/feed';
 
 export type ContentType = {
   getRSSDocument: (id: string) => void;
@@ -50,7 +52,9 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   );
 });
 
-const Card = ({ cardItem }: any) => {
+const Card: FC<{
+  cardItem: FeedType['items'][number];
+}> = ({ cardItem }) => {
   const setUrl = usePlayerStore((state) => state.setUrl);
   const clearHistroy = usePlayerStore((state) => state.clearHistroy);
 

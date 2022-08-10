@@ -1,56 +1,55 @@
 export interface FeedType {
-  title: string;
+  copyright: Copyright;
+  description: string;
+  feedUrl: string;
+  generator: string;
+  image: string;
+  items: Item[];
+  itunes: string;
+  language: string;
+  lastBuildDate: string;
   link: string;
-  pubDate: string;
-  enclosure: Enclosure;
+  managingEditor: string;
+  paginationLinks: PaginationLinks;
+  title: string;
+}
+
+export enum Copyright {
+  WWWGcoresCOM = 'www.gcores.com',
+}
+
+export interface Item {
   content: string;
   contentSnippet: string;
+  enclosure: Enclosure;
   guid: string;
   isoDate: string;
-  itunes?: ItemItunes;
-  items?: Item[];
-  image?: string;
+  itunes: Itunes;
+  pubDate: string;
+  title: string;
 }
 
 export interface Enclosure {
-  url: string;
-  type: Type;
   length: string;
+  type: Type;
+  url: string;
 }
 
 export enum Type {
-  AudioXM4A = 'audio/x-m4a',
+  AudioMPEG = 'audio/mpeg',
 }
 
-export interface ItemItunes {
-  explicit: string;
+export interface Itunes {
+  author: Copyright;
   duration: string;
+  explicit: Explicit;
   image: string;
-  episode: string;
-  season: string;
+  subtitle: string;
+  summary: string;
 }
 
-export interface InterItunes {
-  owner: Owner;
-  image: string;
-  categories: string[];
-  categoriesWithSubs: CategoriesWithSub[];
-  author: string;
-  explicit: string;
-}
-
-export interface CategoriesWithSub {
-  name: string;
-  subs: Sub[];
-}
-
-export interface Sub {
-  name: string;
-}
-
-export interface Owner {
-  name: string;
-  email: string;
+export enum Explicit {
+  Clean = 'clean',
 }
 
 export interface PaginationLinks {
