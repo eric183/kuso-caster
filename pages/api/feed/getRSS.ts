@@ -33,7 +33,7 @@ function runMiddleware(
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '32mb',
+      sizeLimit: false,
     },
     responseLimit: false,
   },
@@ -44,7 +44,7 @@ export default async function handler(
     { feedInfo: FeedType } | { message: string; exist: boolean }
   >,
 ) {
-  // res.api;
+  console.log('begin to check feed from sanity');
   const ifFeedExsit =
     (
       await sanityClient.fetch(feedRoq, {
