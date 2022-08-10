@@ -2,7 +2,7 @@ import { Tooltip } from '@chakra-ui/react';
 import axios from 'axios';
 import { SubscribeContext } from 'context/subscribe';
 import { motion } from 'framer-motion';
-import { FC, useContext, useEffect, useReducer, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { FeedType } from 'types/feed';
 
 export const FeedNav: FC<{
@@ -10,7 +10,7 @@ export const FeedNav: FC<{
 }> = ({ getRSSDocument }) => {
   const [feeds, changeFeeds] = useState<FeedType[]>([]);
 
-  const { feedInfo, subscribeDispatch } = useContext(SubscribeContext);
+  const { feedInfo } = useContext(SubscribeContext);
 
   const getFeedList = async () => {
     const { data, status } = await axios('/api/feed/list', {
