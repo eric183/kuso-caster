@@ -6,13 +6,29 @@ import { encode, getFeed } from 'utils';
 
 import Cors from 'cors';
 
+const feedRoq = groq`*[_type == "feed" && link == $link]{
+  link,
+}`;
+
 const cors = Cors({
   methods: ['POST', 'HEAD'],
 });
 
-const feedRoq = groq`*[_type == "feed" && link == $link]{
-  link,
-}`;
+function runMiddleware(
+  req: any,
+  res: any,
+  fn: (arg0: any, arg1: any, arg2: (result: any) => void) => void,
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: unknown) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,7 +56,3 @@ export default async function handler(
 
   res.status(200).json({ feedInfo });
 }
-function runMiddleware(req: NextApiRequest, res: NextApiResponse<{ feedInfo: FeedType; } | { message: string; exist: boolean; }>, cors: (req: Cors.CorsRequest, res: { statusCode?: number | undefined; setHeader(key: string, value: string): any; end(): any; }, next: (err?: any) => any) => void) {
-  throw new Error('Function not implemented.');
-}
-
