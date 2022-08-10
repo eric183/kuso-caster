@@ -35,7 +35,7 @@ export const config = {
     bodyParser: {
       sizeLimit: false,
     },
-    responseLimit: false,
+    responseLimit: '8mb',
   },
 };
 export default async function handler(
@@ -53,8 +53,8 @@ export default async function handler(
     ).length > 0;
   const feedInfo = (await getFeed(req.body.url)) as unknown as FeedType;
 
-  console.log(ifFeedExsit, 'ifFeedExsit');
-
+  console.log(ifFeedExsit, 'this feed is exsit');
+  console.log(feedInfo);
   if (ifFeedExsit) {
     res
       .status(200)
