@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useFeedStore } from 'context/feed';
+import { usePlayerStore } from 'context/player';
 import { motion } from 'framer-motion';
 import {
   createElement,
@@ -8,7 +9,6 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import Scrollbar from 'smooth-scrollbar';
 
 export type ContentType = {
   getRSSDocument: (id: string) => void;
@@ -30,15 +30,8 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
     getRSSDocument,
   }));
 
-  useEffect(() => {}, [feed]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      Scrollbar.initAll();
-    }
-  }, [scrollRef]);
   return (
-    <div className="flex col-span-9 gap-9 flex-col overflow-hidden">
+    <div className="flex col-span-8 gap-8 flex-col overflow-hidden">
       <h3 className="text-slate-100 font-bold mt-3 ml-5">{feed?.title}</h3>
       {/* grid grid-cols-4 grid-col gap-4 */}
       <ul
@@ -58,6 +51,9 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
 });
 
 const Card = ({ cardItem }: any) => {
+  const setUrl = usePlayerStore((state) => state.setUrl);
+  const clearHistroy = usePlayerStore((state) => state.clearHistroy);
+
   const activeCard = (evt: any) => {
     console.log(evt);
     const dom = evt.currentTarget.cloneNode(true);
@@ -86,7 +82,11 @@ const Card = ({ cardItem }: any) => {
   };
   return (
     <div
-      onClick={activeCard}
+      // onClick={activeCard}
+      onClick={() => {
+        clearHistroy();
+        setUrl(cardItem.guid);
+      }}
       className="transition relative overflow-hidden p-5 h-full w-full rounded-xl shadow-sm shadow-slate-50 mx-auto z-10 bg-black/50 hover:bg-black/90 text-center"
     >
       <motion.img
@@ -105,7 +105,7 @@ const Card = ({ cardItem }: any) => {
   );
 };
 
-const CloneCard = () => {};
+// const CloneCard = () => {};
 
 FeedContent.displayName = 'FeedContent';
 

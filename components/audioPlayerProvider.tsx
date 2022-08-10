@@ -1,19 +1,125 @@
 import styled from '@emotion/styled';
-import { FC } from 'react';
+import { usePlayerStore } from 'context/player';
+import {
+  FC,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import dynamic from 'next/dynamic';
+import { ForwardRefComponent } from 'framer-motion';
 
 const RssPlayerLayout = styled.div`
   left: 0;
+  height: 50px;
 `;
 
 export const AudioPlayerProvider: FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const [audioRender, setAudioRender] = useState<boolean>(false);
+  const url = usePlayerStore((state) => state.url);
+  const setUrl = usePlayerStore((state) => state.setUrl);
+
+  const ref = useRef<HTMLAudioElement>(null!);
+
+  // useEffect(() => {
+  //   if (caching && ref.current.paused && ref.current.src) {
+  //     // debugger;
+  //     // ref.current.play();
+  //   }
+  // }, [caching]);
+
+  useEffect(() => {
+    if (url) {
+      // ref.current.src = url;
+
+      setAudioRender(true);
+    }
+  }, [url]);
+  console.log(url);
+
   return (
     <div className="fixed w-screen h-screen left-0 top-0">
       {children}
-      <RssPlayerLayout className="rss-player absolute left-0 bottom-0 bg-white w-full py-4">
-        player
+      <RssPlayerLayout className="rss-player absolute left-0 bottom-0 w-full flex items-center justify-center z-50">
+        {audioRender && <AudioPlayer url={url} />}
       </RssPlayerLayout>
     </div>
   );
 };
+
+const AudioPlayer = forwardRef<any, any>(({ url }, ref) => {
+  const setStatus = usePlayerStore((state) => state.setStatus);
+  const setCaching = usePlayerStore((state) => state.setCaching);
+  const setCurrentTime = usePlayerStore((state) => state.setCurrentTime);
+  const setVolume = usePlayerStore((state) => state.setVolume);
+
+  const caching = usePlayerStore((state) => state.caching);
+  const currentTime = usePlayerStore((state) => state.currentTime);
+  const volume = usePlayerStore((state) => state.volume);
+  const status = usePlayerStore((state) => state.status);
+
+  const audioRef = useRef<HTMLAudioElement>(null!);
+
+  const recordCurrentTime = () => {
+    clearInterval(recordCurrentTime as unknown as number);
+
+    return setInterval(() => {
+      setCurrentTime(audioRef.current.currentTime);
+      setVolume(audioRef.current.volume);
+      setStatus(audioRef.current.paused ? 'paused' : 'playing');
+    }, 1000);
+  };
+
+  const clearHistroy = () => {
+    setCaching(false);
+    setCurrentTime(audioRef.current.currentTime);
+    setStatus('stopped');
+  };
+
+  const accessAudio = async () => {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+  };
+
+  useImperativeHandle(ref, () => ({
+    // seekTo(currentTime: number) {
+    //   audioRef.current.currentTime = 0;
+    // },
+  }));
+
+  useEffect(() => {
+    if (url && caching) {
+      audioRef.current.currentTime = currentTime;
+      audioRef.current.volume = volume;
+    }
+  }, [caching, url]);
+
+  useEffect(() => {
+    accessAudio();
+  }, []);
+  return (
+    <audio
+      ref={audioRef}
+      controls
+      src={url}
+      className="w-full"
+      autoPlay
+      onPause={() => {
+        setStatus('paused');
+      }}
+      onEnded={() => {
+        clearHistroy();
+      }}
+      onPlaying={(e: any) => {
+        setStatus('playing');
+        setCaching(true);
+        recordCurrentTime();
+      }}
+    />
+  );
+});
+
+AudioPlayer.displayName = 'AudioPlayer';

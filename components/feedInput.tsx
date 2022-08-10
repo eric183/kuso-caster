@@ -97,7 +97,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       animate={isOpen ? 'open' : 'closed'}
       variants={{
         open: {
-          backgroundColor: '#94a3b847',
+          backgroundColor: '#94a3b8cc',
           visibility: 'visible',
         },
         closed: {

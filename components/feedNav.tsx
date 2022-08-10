@@ -42,7 +42,7 @@ export const FeedNav: FC<{
   }, [feedInfo]);
 
   return (
-    <nav className="col-span-1 border-r-2 border-gray-600">
+    <nav className="col-span-2 border-r-2 border-gray-600">
       <ul className="flex flex-col mt-5">
         {feeds.length > 0 &&
           feeds.map((feed, index) => (
