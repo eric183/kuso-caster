@@ -3,6 +3,8 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Spin } from './spin';
 import axios from 'axios';
+import Parser from 'rss-parser';
+import { FeedType } from 'types/feed';
 
 interface NextPageProps {
   isOpen?: boolean;
@@ -20,27 +22,38 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   >('ldle');
 
   const fetchFeed = async () => {
-    const { data, status } = await axios('/api/feed/getRSS', {
+    const { data, status } = await axios.get(feedURL);
+    const checkInfo = await axios('/api/feed/checkCurrentFeedIfExist', {
       method: 'POST',
       data: {
         url: feedURL,
       },
     });
 
-    changeSearchingStatus('processing');
+    if (checkInfo.data.isFeedExsit) {
+    }
 
-    switch (status) {
-      case 200:
-        {
-          if (data.exist) {
-            changeFeedExist(true);
+    if (status === 200) {
+      const parser = new Parser();
+      const feedInfo = (await parser.parseString(data)) as unknown as FeedType;
+
+      debugger;
+
+      changeSearchingStatus('processing');
+
+      switch (status) {
+        case 200:
+          {
+            if (data.exist) {
+              changeFeedExist(true);
+            }
+            subscribeDispatch({ type: 'MUTATION', payload: feedInfo });
           }
-          subscribeDispatch({ type: 'MUTATION', payload: data.feedInfo });
+          break;
+        default: {
+          console.log('requeset not working');
+          resetHanler();
         }
-        break;
-      default: {
-        console.log('requeset not working');
-        resetHanler();
       }
     }
   };
