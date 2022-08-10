@@ -22,7 +22,15 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   >('ldle');
 
   const fetchFeed = async () => {
-    const { data, status } = await axios.get(feedURL);
+    const { data, status } = await axios.get(
+      'https://cors-anywhere.herokuapp.com/' + feedURL,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      },
+    );
+
     const checkInfo = await axios('/api/feed/checkCurrentFeedIfExist', {
       method: 'POST',
       data: {
