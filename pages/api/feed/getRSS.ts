@@ -4,6 +4,12 @@ import { sanityClient } from 'sanity';
 import { FeedType } from 'types/feed';
 import { encode, getFeed } from 'utils';
 
+import Cors from 'cors';
+
+const cors = Cors({
+  methods: ['POST', 'HEAD'],
+});
+
 const feedRoq = groq`*[_type == "feed" && link == $link]{
   link,
 }`;
@@ -14,6 +20,8 @@ export default async function handler(
     { feedInfo: FeedType } | { message: string; exist: boolean }
   >,
 ) {
+  await runMiddleware(req, res, cors);
+
   const ifFeedExsit =
     (
       await sanityClient.fetch(feedRoq, {
@@ -32,3 +40,7 @@ export default async function handler(
 
   res.status(200).json({ feedInfo });
 }
+function runMiddleware(req: NextApiRequest, res: NextApiResponse<{ feedInfo: FeedType; } | { message: string; exist: boolean; }>, cors: (req: Cors.CorsRequest, res: { statusCode?: number | undefined; setHeader(key: string, value: string): any; end(): any; }, next: (err?: any) => any) => void) {
+  throw new Error('Function not implemented.');
+}
+
