@@ -8,7 +8,17 @@ import { pick } from 'lodash';
 import Cors from 'cors';
 
 const feedRoq = groq`*[_type == "feed" && link == $link]{
+  copyright,
+  description,
+  feedUrl,
+  generator,
+  image,
+  itunes,
+  language,
+  lastBuildDate,
   link,
+  paginationLinks,
+  title
 }`;
 
 const cors = Cors({
@@ -33,14 +43,12 @@ function runMiddleware(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ isFeedExsit: boolean }>,
+  res: NextApiResponse<{ isFeedExsit: boolean; feedInfo: FeedType }>,
 ) {
-  const isFeedExsit =
-    (
-      await sanityClient.fetch(feedRoq, {
-        link: req.body.url,
-      })
-    ).length > 0;
+  // console.log(req.body.url, '..............');
+  const feeds = await sanityClient.fetch(feedRoq, {
+    link: req.body.url,
+  });
 
-  res.status(200).json({ isFeedExsit });
+  res.status(200).json({ isFeedExsit: feeds.length > 0, feedInfo: feeds[0] });
 }

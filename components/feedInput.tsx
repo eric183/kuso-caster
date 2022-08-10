@@ -5,6 +5,7 @@ import { Spin } from './spin';
 import axios from 'axios';
 import Parser from 'rss-parser';
 import { FeedType } from 'types/feed';
+import { omit } from 'lodash';
 
 interface NextPageProps {
   isOpen?: boolean;
@@ -22,6 +23,21 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   >('ldle');
 
   const fetchFeed = async () => {
+    const checkInfo = await axios('/api/feed/checkCurrentFeedIfExist', {
+      method: 'POST',
+      data: {
+        url: feedURL,
+      },
+    });
+
+    if (checkInfo.status === 200 && checkInfo.data.isFeedExsit) {
+      changeSearchingStatus('processing');
+      changeFeedExist(true);
+      subscribeDispatch({ type: 'MUTATION', payload: checkInfo.data.feedInfo });
+      console.log('cached');
+      return;
+    }
+
     const { data, status } = await axios.get(
       'https://cors-anywhere.herokuapp.com/' + feedURL,
       {
@@ -31,21 +47,9 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       },
     );
 
-    const checkInfo = await axios('/api/feed/checkCurrentFeedIfExist', {
-      method: 'POST',
-      data: {
-        url: feedURL,
-      },
-    });
-
-    if (checkInfo.data.isFeedExsit) {
-    }
-
     if (status === 200) {
       const parser = new Parser();
       const feedInfo = (await parser.parseString(data)) as unknown as FeedType;
-
-      debugger;
 
       changeSearchingStatus('processing');
 
@@ -68,10 +72,11 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
 
   const subscribeFeed = async () => {
     if (feedExist) return;
-
     const { data, status } = await axios('/api/feed/subscribe', {
       method: 'POST',
-      data: { feedInfo },
+      data: {
+        feedInfo: omit(feedInfo, ['items']),
+      },
     });
 
     if (status === 200) {
@@ -191,7 +196,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
               <motion.img
                 className="mr-3 rounded-md"
                 width={30}
-                src={feedInfo?.itunes?.image}
+                src={feedInfo?.image}
               ></motion.img>
               {feedInfo.title}
 
