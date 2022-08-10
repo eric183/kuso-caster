@@ -6,9 +6,12 @@ export const getFeed = async (url: string) => {
 
   const fetchData = await (await fetch(url)).text();
 
-  const parser = new Parser();
-
   console.log('got feed data from url');
 
-  return await parser.parseString(fetchData);
+  return fetchData;
+  // const parser = new Parser();
+
+  // console.log('got feed data from url');
+
+  // return await parser.parseString(fetchData);
 };

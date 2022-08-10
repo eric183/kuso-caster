@@ -3,6 +3,8 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Spin } from './spin';
 import axios from 'axios';
+import Parser from 'rss-parser';
+import { FeedType } from 'types/feed';
 
 interface NextPageProps {
   isOpen?: boolean;
@@ -27,6 +29,11 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       },
     });
 
+    const parser = new Parser();
+    const feedInfo = (await parser.parseString(
+      data.xml,
+    )) as unknown as FeedType;
+
     changeSearchingStatus('processing');
 
     switch (status) {
@@ -35,7 +42,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
           if (data.exist) {
             changeFeedExist(true);
           }
-          subscribeDispatch({ type: 'MUTATION', payload: data.feedInfo });
+          subscribeDispatch({ type: 'MUTATION', payload: feedInfo });
         }
         break;
       default: {
