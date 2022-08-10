@@ -32,21 +32,19 @@ function runMiddleware(
 
 export const config = {
   api: {
+    bodyParser: {
+      sizeLimit: '32mb',
+    },
     responseLimit: false,
-    bodyParser: false,
   },
 };
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
     { feedInfo: FeedType } | { message: string; exist: boolean }
   >,
 ) {
-  await runMiddleware(req, res, cors);
-  req.body.api.bodyParser = false;
-  req.body.api.responseLimit = false;
-
+  // res.api;
   const ifFeedExsit =
     (
       await sanityClient.fetch(feedRoq, {
