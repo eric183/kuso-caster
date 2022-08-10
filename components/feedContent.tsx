@@ -85,7 +85,7 @@ const Card = ({ cardItem }: any) => {
       // onClick={activeCard}
       onClick={() => {
         clearHistroy();
-        setUrl(cardItem.guid);
+        setUrl(cardItem?.enclosure?.url);
       }}
       className="transition relative overflow-hidden p-5 h-full w-full rounded-xl shadow-sm shadow-slate-50 mx-auto z-10 bg-black/50 hover:bg-black/90 text-center"
     >
