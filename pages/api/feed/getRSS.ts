@@ -35,7 +35,7 @@ export const config = {
     bodyParser: {
       sizeLimit: false,
     },
-    responseLimit: '8mb',
+    responseLimit: false,
   },
 };
 export default async function handler(
