@@ -21,21 +21,8 @@ export const AudioPlayerProvider: FC<{
 }> = ({ children }) => {
   const [audioRender, setAudioRender] = useState<boolean>(false);
   const url = usePlayerStore((state) => state.url);
-  const setUrl = usePlayerStore((state) => state.setUrl);
-
-  const ref = useRef<HTMLAudioElement>(null!);
-
-  // useEffect(() => {
-  //   if (caching && ref.current.paused && ref.current.src) {
-  //     // debugger;
-  //     // ref.current.play();
-  //   }
-  // }, [caching]);
-
   useEffect(() => {
     if (url) {
-      // ref.current.src = url;
-
       setAudioRender(true);
     }
   }, [url]);
@@ -60,7 +47,6 @@ const AudioPlayer = forwardRef<any, any>(({ url }, ref) => {
   const caching = usePlayerStore((state) => state.caching);
   const currentTime = usePlayerStore((state) => state.currentTime);
   const volume = usePlayerStore((state) => state.volume);
-  const status = usePlayerStore((state) => state.status);
 
   const audioRef = useRef<HTMLAudioElement>(null!);
 

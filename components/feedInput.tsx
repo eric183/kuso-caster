@@ -1,18 +1,5 @@
-import type { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import { SubscribeContext } from 'context/subscribe';
-import {
-  createContext,
-  FC,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
-import { getFeed } from 'utils';
-import { FeedType } from 'types/feed';
+import { FC, useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Spin } from './spin';
 import axios from 'axios';
@@ -81,9 +68,6 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
     changeSearchingStatus('ldle');
   };
 
-  useEffect(() => {
-    // console.log(feedInfo);
-  }, [feedInfo]);
   return (
     <motion.div
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 w-full h-full flex items-center justify-center"
@@ -177,14 +161,6 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
         </div>
         {searchingStatus === 'processing' && feedInfo && (
           <div className="w-full absolute left-0 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            {/* <a
-                href="#"
-                aria-current="true"
-                className="block py-2 px-4 w-full text-white bg-blue-700 rounded-t-lg border-b border-gray-200 cursor-pointer dark:bg-gray-800 dark:border-gray-600"
-              >
-                {Profile}
-              </a> */}
-
             <div
               onClick={() => {
                 subscribeFeed();
@@ -206,10 +182,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
             </div>
           </div>
         )}
-        {/* https://www.ximalaya.com/album/3558668.xml */}
       </form>
-
-      {/* <footer className={styles.footer}></footer> */}
     </motion.div>
   );
 };
