@@ -31,14 +31,14 @@ const feedRoq = groq`*[_type == "feed" && link == $link]{
 //   });
 // }
 
-// export const config = {
-//   api: {
-//     // bodyParser: {
-//     //   sizeLimit: false,
-//     // },
-//     responseLimit: false,
-//   },
-// };
+export const config = {
+  api: {
+    // bodyParser: {
+    //   sizeLimit: false,
+    // },
+    responseLimit: false,
+  },
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
