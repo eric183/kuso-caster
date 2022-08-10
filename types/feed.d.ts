@@ -5,13 +5,21 @@ export interface FeedType {
   generator: string;
   image: string;
   items: Item[];
-  itunes: string;
+  itunes: ItemItunes;
   language: string;
   lastBuildDate: string;
   link: string;
   managingEditor: string;
   paginationLinks: PaginationLinks;
   title: string;
+}
+
+export interface ItemItunes {
+  explicit: string;
+  duration: string;
+  image: string;
+  episode: string;
+  season: string;
 }
 
 export enum Copyright {
