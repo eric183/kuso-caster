@@ -7,10 +7,6 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  api: {
-    responseLimit: false,
-    bodyParser: false,
-  },
 };
 
 module.exports = nextConfig;
