@@ -32,9 +32,9 @@ function runMiddleware(
 
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: false,
-    },
+    // bodyParser: {
+    //   sizeLimit: false,
+    // },
     responseLimit: false,
   },
 };
