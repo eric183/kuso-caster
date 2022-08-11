@@ -8,8 +8,9 @@ export default async function handler(
 ) {
   const { feedInfo }: { feedInfo: FeedType } = req.body;
 
+  console.log(feedInfo.feedUrl, '.........');
   const resFeed = await sanityClient.createIfNotExists({
-    _id: encode(feedInfo.link),
+    _id: encode(feedInfo.feedUrl),
     _type: 'feed',
     ...feedInfo,
     image: feedInfo.itunes.image,

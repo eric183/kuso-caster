@@ -118,32 +118,32 @@ const Card: FC<{
   const setUrl = usePlayerStore((state) => state.setUrl);
   const clearHistroy = usePlayerStore((state) => state.clearHistroy);
 
-  const activeCard = (evt: any) => {
-    console.log(evt);
-    const dom = evt.currentTarget.cloneNode(true);
+  // const activeCard = (evt: any) => {
+  //   console.log(evt);
+  //   const dom = evt.currentTarget.cloneNode(true);
 
-    dom.id = 'clone-dom';
-    dom.style.position = 'absolute';
-    dom.style.width = evt.currentTarget.clientWidth + 'px';
-    dom.style.height = evt.currentTarget.clientHeight + 'px';
-    dom.style.top = evt.currentTarget.top;
-    dom.style.left = evt.currentTarget.left;
-    dom.style.borderRadius = 0;
-    // dom.style.top = 0;
-    // dom.style.left = 0;
-    dom.style.zIndex = '9999';
-    dom.classList.add('duration-1000', 'bg-black');
-    dom.classList.remove('hover:bg-black/90', 'bg-black/50');
+  //   dom.id = 'clone-dom';
+  //   dom.style.position = 'absolute';
+  //   dom.style.width = evt.currentTarget.clientWidth + 'px';
+  //   dom.style.height = evt.currentTarget.clientHeight + 'px';
+  //   dom.style.top = evt.currentTarget.top;
+  //   dom.style.left = evt.currentTarget.left;
+  //   dom.style.borderRadius = 0;
+  //   // dom.style.top = 0;
+  //   // dom.style.left = 0;
+  //   dom.style.zIndex = '9999';
+  //   dom.classList.add('duration-1000', 'bg-black');
+  //   dom.classList.remove('hover:bg-black/90', 'bg-black/50');
 
-    document.body.append(dom);
-    setTimeout(() => {
-      dom.style.width = '100%';
-      dom.style.height = '100%';
-      dom.style.left = 0;
-      dom.style.top = 0;
-    }, 200);
-    // createElement(motion.div);
-  };
+  //   document.body.append(dom);
+  //   setTimeout(() => {
+  //     dom.style.width = '100%';
+  //     dom.style.height = '100%';
+  //     dom.style.left = 0;
+  //     dom.style.top = 0;
+  //   }, 200);
+  //   // createElement(motion.div);
+  // };
   return (
     <div
       onClick={() => {
@@ -152,11 +152,11 @@ const Card: FC<{
       }}
       className="transition relative overflow-hidden p-5 h-full w-full rounded-xl shadow-sm shadow-slate-50 mx-auto z-10 bg-black/50 hover:bg-black/90 text-center"
     >
-      <motion.img
+      {/* <motion.img
         className="transition ease-in-out w-full h-full absolute right-0 top-0 opacity-30 hover:opacity-100"
         src={cardItem?.itunes?.image}
         alt={cardItem?.itunes?.subtitle}
-      />
+      /> */}
       <div className="absolute ease-in-out w-full h-full z-20 left-0 top-0"></div>
 
       <article className="relative h-full w-full flex items-center justify-center z-30">
