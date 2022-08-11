@@ -180,7 +180,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
               <motion.img
                 className="mr-3 rounded-md"
                 width={30}
-                src={feedInfo?.image}
+                src={feedInfo?.image as string}
               ></motion.img>
               {feedInfo.title}
 

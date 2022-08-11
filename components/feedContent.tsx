@@ -68,7 +68,7 @@ const Card: FC<{
   const setUrl = usePlayerStore((state) => state.setUrl);
   const clearHistroy = usePlayerStore((state) => state.clearHistroy);
 
-  const activeCard = (evt: Item) => {
+  const activeCard = (evt: any) => {
     console.log(evt);
     const dom = evt.currentTarget.cloneNode(true);
 

@@ -54,7 +54,7 @@ export const FeedNav: FC<{
                 <>
                   <motion.img
                     className="w-10 h-10 rounded-sm bg-slate-100 ring-1 ring-white shrink-0 ml-6 mr-3"
-                    src={feed?.image}
+                    src={feed?.image as string}
                   ></motion.img>
 
                   <span className="text-slate-200 text-xs whitespace-nowrap break-words overflow-hidden flex-grow-1 text-ellipsis">
