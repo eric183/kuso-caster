@@ -6,15 +6,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ feedInfo: FeedType }>,
 ) {
-  const { feedInfo } = req.body;
+  const { feedInfo }: { feedInfo: FeedType } = req.body;
 
   const resFeed = await sanityClient.createIfNotExists({
     _id: encode(feedInfo.link),
     _type: 'feed',
     ...feedInfo,
-    // items: {
-    //   ...feedInfo?.items?.map((item) => ({ ...item, _id: uuid() })),
-    // },
     image: feedInfo.itunes.image,
     itunes: JSON.stringify(feedInfo.itunes),
   });

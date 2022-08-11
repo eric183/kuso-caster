@@ -3,8 +3,12 @@ export interface FeedType {
   description: string;
   feedUrl: string;
   generator: string;
-  image: string;
-  items: Item[];
+  image:
+    | string
+    | {
+        url: string;
+      };
+  items: Item[] | string;
   itunes: ItemItunes;
   language: string;
   lastBuildDate: string;

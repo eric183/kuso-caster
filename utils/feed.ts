@@ -1,17 +1,46 @@
 import axios from 'axios';
+import { db } from 'context/db';
 import Parser from 'rss-parser';
+import { FeedType } from 'types/feed';
+import { encode } from 'utils';
+import { pick } from 'lodash';
 
-export const getFeed = async (url: string) => {
-  console.log('begin to feed data from url');
+const PROXY_SERVER = 'https://cors-anywhere.herokuapp.com/';
 
-  const fetchData = await (await fetch(url)).text();
+const storeItemsIntoDB = async (feed: FeedType) => {
+  const storeFeed = {
+    id: encode(feed.link),
+    items: feed.items as string,
+    image: feed.image as string,
+    ...pick(feed, ['link', 'title']),
+  };
 
-  console.log('got feed data from url');
+  await db.feeds.put(storeFeed);
+};
 
-  return fetchData;
-  // const parser = new Parser();
+export const getFeed = async (feedURL: string) => {
+  const { data, status } = await axios.get(`${PROXY_SERVER}${feedURL}`, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
 
-  // console.log('got feed data from url');
+  if (status === 200) {
+    const parser = new Parser();
+    const feedInfo = (await parser.parseString(data)) as unknown as FeedType;
 
-  // return await parser.parseString(fetchData);
+    if (feedInfo.itunes) {
+      feedInfo.image = feedInfo.itunes.image;
+    } else if (feedInfo.image) {
+      feedInfo.image =
+        typeof feedInfo.image === 'string'
+          ? feedInfo.image
+          : feedInfo.image.url;
+    }
+
+    feedInfo.items = JSON.stringify(feedInfo.items);
+    storeItemsIntoDB(feedInfo);
+
+    return { feedInfo, status };
+  }
 };

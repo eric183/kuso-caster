@@ -1,10 +1,13 @@
 import axios from 'axios';
+import { useContentList } from 'context/contentList';
+import { db } from 'context/db';
 import { useFeedStore } from 'context/feed';
 import { usePlayerStore } from 'context/player';
 import { motion } from 'framer-motion';
-import { FC, forwardRef, useImperativeHandle, useRef } from 'react';
-import { FeedType } from 'types/feed';
-
+import { FC, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { FeedType, Item } from 'types/feed';
+import { encode, getFeed } from 'utils';
+import { omit } from 'lodash';
 export type ContentType = {
   getRSSDocument: (id: string) => void;
 };
@@ -12,19 +15,35 @@ export type ContentType = {
 const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const feed = useFeedStore((state) => state.feed);
   const setFeed = useFeedStore((state) => state.setFeed);
+  const setContentlist = useContentList((state) => state.setContentList);
+  const contentList = useContentList((state) => state.contentList);
   const scrollRef = useRef(null);
   const getRSSDocument = async (id: string) => {
-    const { data, status } = await axios.post('/api/feed/document', {
-      data: id,
-    });
+    let feed = (await db.feeds.get(encode(id))) as unknown as FeedType;
+    if (!feed) {
+      const { feedInfo, status } = (await getFeed(id)) as any;
 
-    setFeed(data.feed);
+      feed = feedInfo;
+
+      // loading
+    }
+    setContentlist(omit(feed, ['items']));
+
+    setFeed({
+      ...feed,
+      items: JSON.parse(feed.items as unknown as string),
+    });
   };
 
   useImperativeHandle(ref, () => ({
     getRSSDocument,
   }));
 
+  useEffect(() => {
+    if (contentList) {
+      getRSSDocument(contentList.link);
+    }
+  }, []);
   return (
     <div className="flex col-span-8 gap-8 flex-col overflow-hidden">
       <h3 className="text-slate-100 font-bold mt-3 ml-5">{feed?.title}</h3>
@@ -33,7 +52,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
         ref={scrollRef}
       >
         {/* Card */}
-        {feed?.items?.map((item, index) => (
+        {(feed?.items as Item[])?.map((item, index) => (
           <li className="w-full mt-5 h-80 cursor-pointer" key={index}>
             <Card cardItem={item} />
           </li>
@@ -44,12 +63,12 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
 });
 
 const Card: FC<{
-  cardItem: FeedType['items'][number];
+  cardItem: Item;
 }> = ({ cardItem }) => {
   const setUrl = usePlayerStore((state) => state.setUrl);
   const clearHistroy = usePlayerStore((state) => state.clearHistroy);
 
-  const activeCard = (evt: any) => {
+  const activeCard = (evt: Item) => {
     console.log(evt);
     const dom = evt.currentTarget.cloneNode(true);
 

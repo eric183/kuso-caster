@@ -6,7 +6,8 @@ import axios from 'axios';
 import Parser from 'rss-parser';
 import { FeedType } from 'types/feed';
 import { omit } from 'lodash';
-
+import { db } from 'context/db';
+import { encode, getFeed } from 'utils';
 interface NextPageProps {
   isOpen?: boolean;
   onClose?: () => void;
@@ -26,7 +27,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
     const checkInfo = await axios('/api/feed/checkCurrentFeedIfExist', {
       method: 'POST',
       data: {
-        url: feedURL,
+        url: feedURL.trim(),
       },
     });
 
@@ -38,34 +39,17 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       return;
     }
 
-    const { data, status } = await axios.get(
-      'https://cors-anywhere.herokuapp.com/' + feedURL,
-      {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      },
-    );
+    const { feedInfo, status } = (await getFeed(feedURL)) as any;
 
-    if (status === 200) {
-      const parser = new Parser();
-      const feedInfo = (await parser.parseString(data)) as unknown as FeedType;
-
-      changeSearchingStatus('processing');
-
-      switch (status) {
-        case 200:
-          {
-            if (data.exist) {
-              changeFeedExist(true);
-            }
-            subscribeDispatch({ type: 'MUTATION', payload: feedInfo });
-          }
-          break;
-        default: {
-          console.log('requeset not working');
-          resetHanler();
+    switch (status) {
+      case 200:
+        {
+          subscribeDispatch({ type: 'MUTATION', payload: feedInfo });
         }
+        break;
+      default: {
+        console.log('requeset not working');
+        resetHanler();
       }
     }
   };
