@@ -4,7 +4,14 @@ import { db } from 'context/db';
 import { useFeedStore } from 'context/feed';
 import { usePlayerStore } from 'context/player';
 import { motion } from 'framer-motion';
-import { FC, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import {
+  FC,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { FeedType, Item } from 'types/feed';
 import { encode, getFeed } from 'utils';
 import { omit } from 'lodash';
@@ -18,20 +25,24 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const setContentlist = useContentList((state) => state.setContentList);
   const contentList = useContentList((state) => state.contentList);
   const scrollRef = useRef(null);
+
+  const [searchingValue, changeSearchingValue] = useState<string>('');
+
   const getRSSDocument = async (id: string) => {
-    let feed = (await db.feeds.get(encode(id))) as unknown as FeedType;
-    if (!feed) {
+    let currentFeed = (await db.feeds.get(encode(id))) as unknown as FeedType;
+
+    if (!currentFeed) {
       const { feedInfo, status } = (await getFeed(id)) as any;
 
-      feed = feedInfo;
+      currentFeed = feedInfo;
 
       // loading
     }
-    setContentlist(omit(feed, ['items']));
+    setContentlist(omit(currentFeed, ['items']));
 
     setFeed({
-      ...feed,
-      items: JSON.parse(feed.items as unknown as string),
+      ...currentFeed,
+      items: JSON.parse(currentFeed.items as unknown as string),
     });
   };
 
@@ -41,22 +52,61 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
 
   useEffect(() => {
     if (contentList) {
-      getRSSDocument(contentList.link);
+      getRSSDocument(contentList.feedUrl);
     }
   }, []);
+
   return (
     <div className="flex col-span-8 gap-8 flex-col overflow-hidden">
-      <h3 className="text-slate-100 font-bold mt-3 ml-5">{feed?.title}</h3>
+      <header className="flex flex-row justify-between w-full mt-3 px-5 items-center">
+        <h3 className="text-slate-100 font-bold">{feed?.title}</h3>
+
+        <div className="relative mr-40 w-80">
+          <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <svg
+              aria-hidden="true"
+              className="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+          <input
+            required
+            type="search"
+            id="search"
+            className="block p-2 pl-10 pr-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search Your Feed By Name"
+            value={searchingValue}
+            onInput={(e: any) => {
+              changeSearchingValue(e.target.value);
+            }}
+          />
+        </div>
+      </header>
+
       <ul
         className="overflow-y-scroll flex-1 grid grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6"
         ref={scrollRef}
       >
         {/* Card */}
-        {(feed?.items as Item[])?.map((item, index) => (
-          <li className="w-full mt-5 h-80 cursor-pointer" key={index}>
-            <Card cardItem={item} />
-          </li>
-        ))}
+        {(feed?.items as Item[])
+          ?.filter((item: Item) =>
+            searchingValue.trim() ? item.title.includes(searchingValue) : true,
+          )
+          ?.map((item, index) => (
+            <li className="w-full mt-5 h-80 cursor-pointer" key={index}>
+              <Card cardItem={item} />
+            </li>
+          ))}
       </ul>
     </div>
   );

@@ -9,10 +9,10 @@ const PROXY_SERVER = 'https://cors-anywhere.herokuapp.com/';
 
 const storeItemsIntoDB = async (feed: FeedType) => {
   const storeFeed = {
-    id: encode(feed.link),
+    id: encode(feed.feedUrl),
     items: feed.items as string,
     image: feed.image as string,
-    ...pick(feed, ['link', 'title']),
+    ...pick(feed, ['feedUrl', 'title']),
   };
 
   await db.feeds.put(storeFeed);
@@ -28,7 +28,7 @@ export const getFeed = async (feedURL: string) => {
   if (status === 200) {
     const parser = new Parser();
     const feedInfo = (await parser.parseString(data)) as unknown as FeedType;
-
+    feedInfo.feedUrl = feedURL;
     if (feedInfo.itunes) {
       feedInfo.image = feedInfo.itunes.image;
     } else if (feedInfo.image) {

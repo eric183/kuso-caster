@@ -49,7 +49,7 @@ export const FeedNav: FC<{
             <Tooltip label={feed?.title} key={index}>
               <li
                 className="flex py-2 flex-nowrap items-center mt-2 cursor-pointer active:cursor-progress"
-                onClick={() => fetchFeed(feed.link)}
+                onClick={() => fetchFeed(feed.feedUrl)}
               >
                 <>
                   <motion.img

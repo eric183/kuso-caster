@@ -12,15 +12,12 @@ interface NextPageProps {
   feed: FeedType;
 }
 
-const Home: NextPage<NextPageProps> = ({ feed }) => {
+const Index: NextPage<NextPageProps> = ({ feed }) => {
   const [feedURL, changeFeedUrl] = useState<string>('');
   const router = useRouter();
-  const checkIfFeedIsExist = async () => {};
 
   const fetchFeed = async () => {
     const feedData = await getFeed(feedURL);
-
-    checkIfFeedIsExist();
   };
 
   useEffect(() => {
@@ -94,14 +91,4 @@ const Home: NextPage<NextPageProps> = ({ feed }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (_context) => {
-  const feed = await getFeed('http://rss.lizhi.fm/rss/74131208.xml');
-
-  return {
-    props: {
-      feed,
-    },
-  };
-};
-
-export default Home;
+export default Index;

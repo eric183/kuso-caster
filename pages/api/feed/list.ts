@@ -6,7 +6,7 @@ import { FeedType } from 'types/feed';
 
 const feedRoq = groq`*[_type == "feed"]{
     title,
-    link,
+    feedUrl,
     image,
     _id
   }`;

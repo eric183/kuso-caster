@@ -45,6 +45,8 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       case 200:
         {
           subscribeDispatch({ type: 'MUTATION', payload: feedInfo });
+
+          changeSearchingStatus('processing');
         }
         break;
       default: {
@@ -78,6 +80,9 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
     changeSearchingStatus('ldle');
   };
 
+  useEffect(() => {
+    console.log(feedInfo);
+  }, [feedInfo]);
   return (
     <motion.div
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 w-full h-full flex items-center justify-center"
