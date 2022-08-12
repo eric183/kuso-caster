@@ -7,6 +7,7 @@ import { FeedInput } from '~/components/feedInput';
 import { ContentType, FeedContent } from '~/components/feedContent';
 import { FeedNav } from '~/components/feedNav';
 import axios from 'axios';
+import { signOut } from 'next-auth/react';
 
 interface NextPageProps {
   feed: FeedType;
@@ -34,6 +35,7 @@ const Home: NextPage<NextPageProps> = () => {
         onClick={() => setOpen(true)}
       >
         <motion.img
+          onClick={() => signOut()}
           src="https://avatars.githubusercontent.com/u/10773980?s=40&v=4"
           className="w-8 h-8 rounded-full bg-slate-100 ring-2 ring-white mr-8"
         ></motion.img>

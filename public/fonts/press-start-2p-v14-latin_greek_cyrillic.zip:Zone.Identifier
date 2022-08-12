@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://google-webfonts-helper.herokuapp.com/fonts/press-start-2p?subsets=cyrillic,greek,latin
+HostUrl=https://google-webfonts-helper.herokuapp.com/api/fonts/press-start-2p?download=zip&subsets=latin,greek,cyrillic&variants=regular

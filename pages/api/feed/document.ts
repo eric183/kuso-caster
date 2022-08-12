@@ -8,7 +8,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ feed: FeedType }>,
 ): Promise<void> {
-  console.log(encode(req.body.data), 'req.body.url');
   const feed = (await sanityClient.getDocument(
     encode(req.body.data),
   )) as FeedType;

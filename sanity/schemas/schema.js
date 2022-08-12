@@ -6,6 +6,7 @@ import feed from './feed';
 import user from './user';
 import pagenationLink from './paginationLink';
 import enclosure from './enclosure';
+import playInfo from './playInfo';
 // import item from './item';
 
 export default createSchema({
@@ -16,6 +17,7 @@ export default createSchema({
     user,
     pagenationLink,
     // item,
+    playInfo,
     enclosure,
   ]),
 })

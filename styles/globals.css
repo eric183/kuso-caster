@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.eot');
+  src: local(''),
+       url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.woff2') format('woff2'),
+       url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.woff') format('woff'), 
+       url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.ttf') format('truetype'), 
+       url('/fonts/press-start-2p-v14-latin_greek_cyrillic-regular.svg#PressStart2P') format('svg'); 
+} */
+
 html,
 body {
   padding: 0;
@@ -18,6 +31,7 @@ a {
 * {
   box-sizing: border-box;
 
+  /* font-family: "Press Start 2P"; */
   
 }
 

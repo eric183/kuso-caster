@@ -1,11 +1,10 @@
-import axios from 'axios';
 import { useContentList } from 'context/contentList';
 import { db } from 'context/db';
 import { useFeedStore } from 'context/feed';
 import { usePlayerStore } from 'context/player';
-import { motion } from 'framer-motion';
 import {
   FC,
+  FormEvent,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -86,7 +85,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
             className="block p-2 pl-10 pr-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search Your Feed By Name"
             value={searchingValue}
-            onInput={(e: any) => {
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               changeSearchingValue(e.target.value);
             }}
           />
@@ -94,7 +93,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
       </header>
 
       <ul
-        className="overflow-y-scroll flex-1 grid grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6"
+        className="overflow-y-scroll flex-1 grid grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6 pb-20"
         ref={scrollRef}
       >
         {/* Card */}
