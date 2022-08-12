@@ -1,13 +1,12 @@
 import { motion } from 'framer-motion';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import { useRef, useState } from 'react';
 import { FeedType } from 'types/feed';
 import { FeedInput } from '~/components/feedInput';
 import { ContentType, FeedContent } from '~/components/feedContent';
 import { FeedNav } from '~/components/feedNav';
-import axios from 'axios';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 interface NextPageProps {
   feed: FeedType;
@@ -16,11 +15,21 @@ interface NextPageProps {
 const Home: NextPage<NextPageProps> = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const feedRef = useRef<ContentType>(null);
+  const { data, status } = useSession();
+  const router = useRouter();
 
   const getRSSDocument = (link: string) => {
     feedRef.current?.getRSSDocument(link);
   };
 
+  if (status === 'unauthenticated') {
+    router.replace('/');
+  }
+
+
+
+  // if(status === 'authenticated' && )
+  console.log(data);
   return (
     <div className="bg-gray-700 h-screen w-screen flex items-center justify-center flex-col">
       <FeedInput

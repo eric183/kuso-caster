@@ -5,6 +5,11 @@ import { randomUUID } from 'crypto';
 import { sanityClient } from 'sanity';
 import { groq } from 'next-sanity';
 import { encode } from 'utils';
+import { getSession } from 'next-auth/react';
+import { getToken } from 'next-auth/jwt';
+import { expireTime } from 'utils/expireTime';
+import { getSessionUser } from 'utils/getSessionUser';
+import { NextApiRequest } from 'next';
 
 const query = groq`*[_type == "user" && email == $email]`;
 
@@ -25,39 +30,46 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const cookie = req!.headers!.cookie as string;
-        let sessionToken = /next-auth\.session-token=(.+);?/.exec(cookie) as
-          | string[]
-          | string;
-        sessionToken = sessionToken ? sessionToken[1] : '';
+        // let userInfo = await getSessionUser(req as NextApiRequest);
 
+        // const cookie = req!.headers!.cookie as string;
+        // let sessionToken = /next-auth\.session-token=(.+);?/.exec(cookie) as
+        //   | string[]
+        //   | string;
+        // sessionToken = sessionToken ? sessionToken[1] : '';
+
+        console.log(credentials, 'credentials');
+        // console.log(cookie, 'sessionToken');
         const { email, password } = credentials as {
           email: string;
           password: string;
         };
+        let userInfo = (
+          await sanityClient.fetch(`*[_type == "user" && email == $email]`, {
+            email,
+          })
+        )[0];
 
-        let userInfo = (await sanityClient.fetch(query, { email }))[0];
-
-        console.log(userInfo, 'userInfo');
+        // console.log(userInfo, 'userInfo');
         if (!userInfo) {
           userInfo = await sanityClient.create({
             _type: 'user',
             email,
             name: email,
-            session: {
-              sessionToken: sessionToken,
-              expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
-            },
+            // session: {
+            //   // sessionToken: sessionToken,
+            //   expiresAt: expireTime(),
+            // },
           });
         } else {
           userInfo = sanityClient
             .patch(userInfo._id)
             .set({
               role: 'user',
-              session: {
-                sessionToken: sessionToken,
-                expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
-              },
+              // session: {
+              //   // sessionToken: sessionToken,
+              //   expiresAt: expireTime(),
+              // },
             })
             .commit();
         }
@@ -68,6 +80,7 @@ export default NextAuth({
   ],
   session: {
     strategy: 'jwt',
+    // maxAge: 60,
   },
   callbacks: {
     async signIn() {
@@ -76,38 +89,39 @@ export default NextAuth({
     async redirect({ baseUrl }) {
       return baseUrl;
     },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      return session;
-    },
-    async jwt({ token, user, account }) {
-      if (account) {
-        token.accessToken = account.access_token;
+    async jwt({ token, user, account, profile, isNewUser }) {
+      // console.log(token, 'jwt.token');
+      // console.log(user, 'jwt.user');
+      // console.log(account, 'jwt.account');
+      // console.log(profile, 'jwt.profile');
+      // console.log(isNewUser, 'jwt.isNewUser');
 
-        // if (token.accessToken) {
-        //   console.log(token, '........++');
-        //   await prismaClient.user.update({
-        //     where: {
-        //       id: user?.id,
-        //     },
-        //     data: {
-        //       sessions: {
-        //         connectOrCreate: {
-        //           where: {
-        //             userId: user?.id,
-        //           },
-        //           create: {
-        //             sessionToken: token.accessToken as string,
-        //             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-        //           },
-        //         },
-        //       },
-        //     },
-        //   });
-        // }
-      }
+      // if (account) {
+      //   token.accessToken = account.access_token;
 
+      //   // if (token.accessToken) {
+      //   //   console.log(token, '........++');
+      //   //   sanityClient
+      //   //     .patch(userInfo._id)
+      //   //     .set({
+      //   //       role: 'user',
+      //   //       session: {
+      //   //         sessionToken: sessionToken,
+      //   //         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      //   //       },
+      //   //     })
+      //   //     .commit();
+      //   // }
+      // }
       return token;
+    },
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken;
+
+      // console.log(user, 'session.user');
+      // console.log(session, 'session.session');
+      // console.log(token, 'session.token');
+      return session;
     },
   },
   pages: {

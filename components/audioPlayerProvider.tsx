@@ -31,7 +31,7 @@ export const AudioPlayerProvider: FC<{
   return (
     <div className="fixed w-screen h-screen left-0 top-0">
       {children}
-      <RssPlayerLayout className="rss-player absolute left-0 bottom-0 w-full flex items-center justify-center z-50">
+      <RssPlayerLayout className="rss-player absolute left-0 bottom-0 w-full flex items-center justify-center z-40">
         {audioRender && <AudioPlayer url={url} />}
       </RssPlayerLayout>
     </div>

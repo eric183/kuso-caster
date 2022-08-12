@@ -2,6 +2,7 @@ import { Tooltip } from '@chakra-ui/react';
 import axios from 'axios';
 import { SubscribeContext } from 'context/subscribe';
 import { motion } from 'framer-motion';
+import { signOut } from 'next-auth/react';
 import { FC, useContext, useEffect, useState } from 'react';
 import { FeedType } from 'types/feed';
 
@@ -16,6 +17,10 @@ export const FeedNav: FC<{
     const { data, status } = await axios('/api/feed/list', {
       method: 'GET',
     });
+
+    if (data.error) {
+      signOut();
+    }
 
     if (status !== 200) {
       console.log('requeset not working');
@@ -38,12 +43,12 @@ export const FeedNav: FC<{
   }, [feeds]);
 
   useEffect(() => {
-    changeFeeds(feeds.concat(feedInfo));
+    // changeFeeds(feeds.concat(feedInfo));
   }, [feedInfo]);
   return (
     <nav className="col-span-2 border-r-2 border-gray-600">
       <ul className="flex flex-col mt-5">
-        {feeds.length > 0
+        {feeds && feeds.length > 0
           ? feeds
               .filter((x) => x)
               .map((feed, index) => (
@@ -70,3 +75,9 @@ export const FeedNav: FC<{
     </nav>
   );
 };
+
+// export const getServerSideProps = async (ctx) => {
+//   console.log(ctx);
+
+//   return {};
+// };

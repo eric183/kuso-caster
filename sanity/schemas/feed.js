@@ -18,17 +18,6 @@ export default {
       title: "Feed URL",
       type: "url",
     },
-    // {
-    //   name: "items",
-    //   title: 'Items',
-    //   type: 'array',
-    //   of: [
-    //     {
-    //       title: 'Item',
-    //       type: 'item',
-    //     },
-    //   ],
-    // },
     {
       name: "language",
       title: "Language",

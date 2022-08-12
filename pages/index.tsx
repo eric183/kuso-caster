@@ -60,12 +60,17 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
     //   signIn();
     //   // router.replace('/auth/signin');
     // }
+    if (data) {
+      // router.replace('/home');
+      signIn();
+    }
   }, []);
 
   // console.log(data);
+
   // console.log(csrfToken, 'token');
   return (
-    <div className="bg-gray-700">
+    <div className="index-page bg-gray-700 relative w-screen h-screen z-50">
       <Head>
         <title>kuso feed</title>
         <meta name="description" content="generate feed by yourself" />

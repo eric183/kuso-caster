@@ -7,9 +7,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { AudioPlayerProvider } from '~/components/audioPlayerProvider';
 import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function KusoCasterMain({ Component, pageProps }: AppProps) {
   const [feedInfo, dispatch] = useReducer(subscribeReducer, null!);
-
   return (
     <SessionProvider>
       <ChakraProvider>
@@ -28,11 +27,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
-{
-  /* <Head>
-<title>kuso feed</title>
-<meta name="description" content="generate feed by yourself" />
-<link rel="icon" href="/favicon.ico" />
-</Head> */
-}
+export default KusoCasterMain;

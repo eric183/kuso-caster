@@ -55,6 +55,7 @@ export default {
         title: "Feed Ids",
         type: "array",
         of: [{type: "string"}],
+        initialValue: [],
       },
       {
         name: "session",

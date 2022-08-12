@@ -57,7 +57,10 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   };
 
   const subscribeFeed = async () => {
-    if (feedExist) return;
+    if (feedExist) {
+      onClose && onClose();
+      return;
+    }
     const { data, status } = await axios('/api/feed/subscribe', {
       method: 'POST',
       data: {
@@ -115,7 +118,9 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
         className="basis-5/12 relative"
         onSubmit={(evt: any) => {
           evt.preventDefault();
-          if (feedExist) return;
+          if (feedExist) {
+            return;
+          }
           changeSearchingStatus('searching');
           fetchFeed();
         }}
