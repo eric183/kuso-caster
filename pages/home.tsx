@@ -28,8 +28,6 @@ const Home: NextPage<NextPageProps> = () => {
     router.replace('/');
   }
 
-  // if(status === 'authenticated' && )
-  console.log(data);
   return (
     <div className="bg-gray-700 h-screen w-screen flex items-center justify-center flex-col">
       <FeedInput

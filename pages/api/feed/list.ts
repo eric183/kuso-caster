@@ -18,6 +18,7 @@ export default async function handler(
 ): Promise<void> {
   const user = await getSessionUser(req);
 
+  console.log(req, 'list');
   if (!user) {
     res.status(200).send({ error: 'failed to load data' });
     return;

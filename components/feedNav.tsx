@@ -1,6 +1,7 @@
 import { Tooltip } from '@chakra-ui/react';
 import axios from 'axios';
 import { SubscribeContext } from 'context/subscribe';
+import { useloadingStore } from 'context/useLoading';
 import { motion } from 'framer-motion';
 import { signOut } from 'next-auth/react';
 import { FC, useContext, useEffect, useState } from 'react';
@@ -10,6 +11,9 @@ export const FeedNav: FC<{
   getRSSDocument?: (feedInfo: FeedType) => void;
   feed: FeedType;
 }> = ({ getRSSDocument, feed }) => {
+  const setLoading = useloadingStore((state) => state.setLoading);
+  const loading = useloadingStore((state) => state.loading);
+
   const [feeds, changeFeeds] = useState<FeedType[]>([]);
 
   const { feedInfo } = useContext(SubscribeContext);
@@ -29,9 +33,12 @@ export const FeedNav: FC<{
     }
 
     changeFeeds(data.feedList as FeedType[]);
+
+    setLoading(false);
   };
 
   const fetchFeed = async (feedInfo: FeedType) => {
+    setLoading(true);
     getRSSDocument && getRSSDocument(feedInfo);
   };
 

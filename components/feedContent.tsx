@@ -16,6 +16,7 @@ import { getFeed } from 'utils';
 import { omit } from 'lodash';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import { useloadingStore } from 'context/useLoading';
 export type ContentType = {
   getRSSDocument: (feedInfo: FeedType) => void;
 };
@@ -26,15 +27,18 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const addItemToFeed = useFeedStore((state) => state.addItemToFeed);
   const setContentlist = useContentList((state) => state.setContentList);
   const contentList = useContentList((state) => state.contentList);
+  const setLoading = useloadingStore((state) => state.setLoading);
+
   const scrollRef = useRef(null);
 
   const [searchingValue, changeSearchingValue] = useState<string>('');
 
   const getRSSDocument = async (_feed: FeedType) => {
-    console.log(_feed);
     let currentFeed = (await db.feeds.get(_feed._id!)) as unknown as FeedType;
 
     if (!currentFeed) {
+      setLoading(true);
+
       const { feedInfo, status } = (await getFeed(_feed.feedUrl, _feed)) as any;
 
       currentFeed = feedInfo;

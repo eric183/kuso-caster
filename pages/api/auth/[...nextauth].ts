@@ -5,6 +5,24 @@ import { sanityClient } from 'sanity';
 import { groq } from 'next-sanity';
 const query = groq`*[_type == "user" && email == $email]`;
 
+const initFeedIDs = [
+  '53TuM276zQmYEcFTpj6dbo',
+  '53TuM276zQmYEcFTpj7wQg',
+  'H8yYePJlyQjGMAjuIw7Cwd',
+  'H8yYePJlyQjGMAjuIwKpAp',
+  'H8yYePJlyQjGMAjuIwLXeV',
+  'H8yYePJlyQjGMAjuIwMKIV',
+  'H8yYePJlyQjGMAjuIwSwI7',
+  'H8yYePJlyQjGMAjuIwT1eF',
+  'cH1gzwqkAc2SIQ4KxuAcJN',
+  'cH1gzwqkAc2SIQ4KxubFaj',
+  'cH1gzwqkAc2SIQ4KxubYQJ',
+  'cH1gzwqkAc2SIQ4KxugL40',
+  'cH1gzwqkAc2SIQ4KxujY3k',
+  'cH1gzwqkAc2SIQ4KxukbNV',
+  'cH1gzwqkAc2SIQ4Kxulch9',
+];
+
 export default NextAuth({
   // adapter: PrismaAdapter(prismaClient),
   secret: 'supersecret',
@@ -48,7 +66,7 @@ export default NextAuth({
             _type: 'user',
             email,
             name: email,
-            feedIds: [],
+            feedIds: initFeedIDs,
             // session: {
             //   // sessionToken: sessionToken,
             //   expiresAt: expireTime(),

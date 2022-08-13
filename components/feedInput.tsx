@@ -98,7 +98,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   };
 
   useEffect(() => {
-    console.log(feedInfo);
+    // console.log(feedInfo);
   }, [feedInfo]);
   return (
     <motion.div
