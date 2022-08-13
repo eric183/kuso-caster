@@ -37,7 +37,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
     let currentFeed = (await db.feeds.get(_feed._id!)) as unknown as FeedType;
 
     if (!currentFeed) {
-      setLoading(true);
+      // setLoading(true);
 
       const { feedInfo, status } = (await getFeed(_feed.feedUrl, _feed)) as any;
 
