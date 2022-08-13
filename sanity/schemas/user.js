@@ -54,7 +54,18 @@ export default {
         name: "feedIds",
         title: "Feed Ids",
         type: "array",
-        of: [{type: "string"}],
+        of: [
+          { type: "string" }
+        ],
+        initialValue: ['YW5jaG9yLmZtL3MvNGE0', 'ZHJpbmt3aXRobWFyaW8u', 'ZmVlZC50YW5nc3VhbnJh', 'anVzdHBvZG1lZGlhLmNv', 'b3Blbmxhbmd1YWdlLmNv', 'cmVkY2lyY2xlLmNvbS9z', 'cnNzLmxpemhpLmZtL3Jz', 'd3d3LnN0b3ZvbC5jbHVi', 'd3d3LnhpbWFsYXlhLmNv', 'dGFya29jaG9uc2t5LnR5'],
+      },
+      {
+        name: "favoriteFeedIds",
+        title: "Favorite Feed Ids",
+        type: "array",
+        of: [
+          { type: "string" }
+        ],
         initialValue: [],
       },
       {

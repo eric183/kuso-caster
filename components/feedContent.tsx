@@ -14,6 +14,7 @@ import {
 import { FeedType, Item } from 'types/feed';
 import { encode, getFeed } from 'utils';
 import { omit } from 'lodash';
+import { motion } from 'framer-motion';
 export type ContentType = {
   getRSSDocument: (id: string) => void;
 };
@@ -151,11 +152,11 @@ const Card: FC<{
       }}
       className="transition relative overflow-hidden p-5 h-full w-full rounded-xl shadow-sm shadow-slate-50 mx-auto z-10 bg-black/50 hover:bg-black/90 text-center"
     >
-      {/* <motion.img
+      <motion.img
         className="transition ease-in-out w-full h-full absolute right-0 top-0 opacity-30 hover:opacity-100"
         src={cardItem?.itunes?.image}
         alt={cardItem?.itunes?.subtitle}
-      /> */}
+      />
       <div className="absolute ease-in-out w-full h-full z-20 left-0 top-0"></div>
 
       <article className="relative h-full w-full flex items-center justify-center z-30">
