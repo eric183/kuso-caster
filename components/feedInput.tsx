@@ -80,7 +80,6 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
 
     setIsProcessing(false);
 
-    console.log(feedInfoWithItems, ' feedInfoWithItems');
     if (status === 200) {
       storeItemsIntoDB(feedInfoWithItems);
 

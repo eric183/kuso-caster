@@ -1,16 +1,8 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 // import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { randomUUID } from 'crypto';
 import { sanityClient } from 'sanity';
 import { groq } from 'next-sanity';
-import { encode } from 'utils';
-import { getSession } from 'next-auth/react';
-import { getToken } from 'next-auth/jwt';
-import { expireTime } from 'utils/expireTime';
-import { getSessionUser } from 'utils/getSessionUser';
-import { NextApiRequest } from 'next';
-
 const query = groq`*[_type == "user" && email == $email]`;
 
 export default NextAuth({
@@ -56,18 +48,7 @@ export default NextAuth({
             _type: 'user',
             email,
             name: email,
-            feedIds: [
-              'YW5jaG9yLmZtL3MvNGE0',
-              'ZHJpbmt3aXRobWFyaW8u',
-              'ZmVlZC50YW5nc3VhbnJh',
-              'anVzdHBvZG1lZGlhLmNv',
-              'b3Blbmxhbmd1YWdlLmNv',
-              'cmVkY2lyY2xlLmNvbS9z',
-              'cnNzLmxpemhpLmZtL3Jz',
-              'd3d3LnN0b3ZvbC5jbHVi',
-              'd3d3LnhpbWFsYXlhLmNv',
-              'dGFya29jaG9uc2t5LnR5',
-            ],
+            feedIds: [],
             // session: {
             //   // sessionToken: sessionToken,
             //   expiresAt: expireTime(),
