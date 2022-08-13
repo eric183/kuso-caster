@@ -7,6 +7,7 @@ export interface Feed {
   items: string;
   feedUrl: string;
   title: string;
+  _id: string;
 }
 
 export class MySubClassedDexie extends Dexie {
@@ -15,7 +16,7 @@ export class MySubClassedDexie extends Dexie {
   constructor() {
     super('myDatabase');
     this.version(1).stores({
-      feeds: 'id, feedUrl, title, image, items',
+      feeds: 'id, feedUrl, title, image, items, _id',
     });
   }
 }

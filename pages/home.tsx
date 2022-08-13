@@ -15,18 +15,18 @@ interface NextPageProps {
 const Home: NextPage<NextPageProps> = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const feedRef = useRef<ContentType>(null);
+
+  const [subscribeFeed, changeSubscribeFeed] = useState<FeedType>(null!);
   const { data, status } = useSession();
   const router = useRouter();
 
-  const getRSSDocument = (link: string) => {
-    feedRef.current?.getRSSDocument(link);
+  const getRSSDocument = (feedInfo: FeedType) => {
+    feedRef.current?.getRSSDocument(feedInfo);
   };
 
   if (status === 'unauthenticated') {
     router.replace('/');
   }
-
-
 
   // if(status === 'authenticated' && )
   console.log(data);
@@ -36,7 +36,8 @@ const Home: NextPage<NextPageProps> = () => {
         isOpen={isOpen}
         onClose={() => setOpen(false)}
         onSubscribe={(data) => {
-          console.log(JSON.stringify(data), 'subscribe');
+          console.log(data, 'subscribe');
+          changeSubscribeFeed(data);
         }}
       />
       <header
@@ -51,7 +52,7 @@ const Home: NextPage<NextPageProps> = () => {
       </header>
 
       <main className="flex-1 w-full grid grid-cols-10 gap-10 overflow-hidden">
-        <FeedNav getRSSDocument={getRSSDocument} />
+        <FeedNav getRSSDocument={getRSSDocument} feed={subscribeFeed} />
         <FeedContent ref={feedRef} />
       </main>
     </div>

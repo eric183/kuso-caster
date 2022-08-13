@@ -8,7 +8,7 @@ export interface FeedType {
     | {
         url: string;
       };
-  items: Item[] | string;
+  items?: Item[] | string;
   itunes: ItemItunes;
   language: string;
   lastBuildDate: string;
@@ -16,6 +16,7 @@ export interface FeedType {
   managingEditor: string;
   paginationLinks: PaginationLinks;
   title: string;
+  _id?: string;
 }
 
 export interface ItemItunes {

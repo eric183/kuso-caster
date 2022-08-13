@@ -7,7 +7,7 @@ import Parser from 'rss-parser';
 import { FeedType } from 'types/feed';
 import { omit } from 'lodash';
 import { db } from 'context/db';
-import { encode, getFeed } from 'utils';
+import { getFeed, storeItemsIntoDB } from 'utils';
 interface NextPageProps {
   isOpen?: boolean;
   onClose?: () => void;
@@ -18,7 +18,7 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   const [feedURL, changeFeedUrl] = useState<string>('');
   const [feedExist, changeFeedExist] = useState<boolean>(false);
   const { feedInfo, subscribeDispatch } = useContext(SubscribeContext);
-
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [searchingStatus, changeSearchingStatus] = useState<
     'ldle' | 'searching' | 'processing'
   >('ldle');
@@ -57,10 +57,15 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   };
 
   const subscribeFeed = async () => {
+    // debugger;
     if (feedExist) {
       onClose && onClose();
       return;
     }
+
+    if (isProcessing) return;
+
+    setIsProcessing(true);
     const { data, status } = await axios('/api/feed/subscribe', {
       method: 'POST',
       data: {
@@ -68,10 +73,20 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
       },
     });
 
+    const feedInfoWithItems = {
+      ...feedInfo,
+      ...data.feedInfo,
+    };
+
+    setIsProcessing(false);
+
+    console.log(feedInfoWithItems, ' feedInfoWithItems');
     if (status === 200) {
+      storeItemsIntoDB(feedInfoWithItems);
+
       resetHanler();
 
-      onSubscribe && onSubscribe(data);
+      onSubscribe && onSubscribe(feedInfoWithItems);
 
       onClose && onClose();
     }

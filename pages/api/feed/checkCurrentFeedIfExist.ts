@@ -38,9 +38,9 @@ export default async function handler(
   // console.log(user.feedIds, 'user.feedIds');
   // console.log(feeds[0], 'feeds[0]');
 
-  console.log(feeds);
+  // console.log(feeds, '......');
 
-  if ((isFeedExsit && !user.feedIds) || !user.feedIds.includes(feeds[0]._id)) {
+  if (isFeedExsit && (!user.feedIds || !user.feedIds.includes(feeds[0]._id))) {
     await sanityClient
       .patch(user._id)
       .setIfMissing({ feedIds: [] })

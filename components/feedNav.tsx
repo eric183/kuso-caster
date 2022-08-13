@@ -7,8 +7,9 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { FeedType } from 'types/feed';
 
 export const FeedNav: FC<{
-  getRSSDocument?: (id: string) => void;
-}> = ({ getRSSDocument }) => {
+  getRSSDocument?: (feedInfo: FeedType) => void;
+  feed: FeedType;
+}> = ({ getRSSDocument, feed }) => {
   const [feeds, changeFeeds] = useState<FeedType[]>([]);
 
   const { feedInfo } = useContext(SubscribeContext);
@@ -30,8 +31,8 @@ export const FeedNav: FC<{
     changeFeeds(data.feedList as FeedType[]);
   };
 
-  const fetchFeed = async (id: string) => {
-    getRSSDocument && getRSSDocument(id);
+  const fetchFeed = async (feedInfo: FeedType) => {
+    getRSSDocument && getRSSDocument(feedInfo);
   };
 
   useEffect(() => {
@@ -40,11 +41,12 @@ export const FeedNav: FC<{
 
   useEffect(() => {
     // console.log(feeds);
-  }, [feeds]);
 
-  useEffect(() => {
-    // changeFeeds(feeds.concat(feedInfo));
-  }, [feedInfo]);
+    if (feed) {
+      changeFeeds(feeds.concat(feed));
+    }
+  }, [feed]);
+
   return (
     <nav className="feed-nav col-span-2 h-full border-r-2 border-gray-600 overflow-hidden">
       <ul className="flex flex-col mt-5 overflow-y-scroll h-full pb-20">
@@ -53,7 +55,7 @@ export const FeedNav: FC<{
               <Tooltip label={feed?.title} key={index}>
                 <li
                   className="flex py-2 flex-nowrap items-center mt-2 cursor-pointer active:cursor-progress"
-                  onClick={() => fetchFeed(feed.feedUrl)}
+                  onClick={() => fetchFeed(feed)}
                 >
                   <>
                     <motion.img

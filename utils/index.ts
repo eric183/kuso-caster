@@ -1,3 +1,1 @@
-export { getFeed } from './feed';
-
-export { decode, encode } from './bufferCoder';
+export { getFeed, storeItemsIntoDB } from './feed';
