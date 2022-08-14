@@ -34,11 +34,11 @@ export const FeedNav: FC<{
 
     changeFeeds(data.feedList as FeedType[]);
 
-    setLoading(false);
+    // setLoading(false);
   };
 
   const fetchFeed = async (feedInfo: FeedType) => {
-    setLoading(true);
+    // setLoading(true);
     getRSSDocument && getRSSDocument(feedInfo);
   };
 

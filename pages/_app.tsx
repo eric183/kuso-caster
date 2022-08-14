@@ -33,11 +33,11 @@ function KusoCasterMain({ Component, pageProps }: AppProps) {
             <>
               <Component {...pageProps} />
 
-              {loading && (
+              {/* {loading && (
                 <div className="fixed top-0 left-0 w-full h-10">
                   <Progress size="xs" isIndeterminate />
                 </div>
-              )}
+              )} */}
             </>
           </AudioPlayerProvider>
         </SubscribeContext.Provider>
