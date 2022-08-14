@@ -39,6 +39,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
     if (!currentFeed) {
       // setLoading(true);
 
+      console.log(process.env.NEXT_PUBLIC_PROXY_SERVER);
       const { feedInfo, status } = (await getFeed(_feed.feedUrl, _feed)) as any;
 
       currentFeed = feedInfo;

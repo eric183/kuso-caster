@@ -4,8 +4,6 @@ import Parser from 'rss-parser';
 import { FeedType } from 'types/feed';
 import { pick } from 'lodash';
 
-const PROXY_SERVER = 'https://cors-anywhere.herokuapp.com/';
-
 export const storeItemsIntoDB = async (feed: FeedType) => {
   const _id = feed._id as string;
 
@@ -23,12 +21,16 @@ export const storeItemsIntoDB = async (feed: FeedType) => {
 };
 
 export const getFeed = async (feedURL: string, feed?: FeedType) => {
+  console.log(process.env.NEXT_PUBLIC_PROXY_SERVER, '.........');
   try {
-    const { data, status } = await axios.get(`${PROXY_SERVER}${feedURL}`, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
+    const { data, status } = await axios.get(
+      `${process.env.NEXT_PUBLIC_PROXY_SERVER}${feedURL}`,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       },
-    });
+    );
 
     if (status === 200) {
       const parser = new Parser();
