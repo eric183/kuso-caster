@@ -40,10 +40,18 @@ const Home: NextPage<NextPageProps> = () => {
       />
       <header
         className="w-full py-4 flex items-center justify-end border-b-2 border-gray-600"
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setOpen(true);
+        }}
       >
         <motion.img
-          onClick={() => signOut()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            signOut();
+          }}
           src="https://avatars.githubusercontent.com/u/10773980?s=40&v=4"
           className="w-8 h-8 rounded-full bg-slate-100 ring-2 ring-white mr-8"
         ></motion.img>

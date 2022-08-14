@@ -15,7 +15,7 @@ import {
   useSession,
 } from 'next-auth/react';
 import SignComponent from '~/components/sign';
-import { Button } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
 
 interface Credentials {
   id: string;
@@ -66,9 +66,12 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
     }
   }, []);
 
-  // console.log(data);
+  console.log(data, status);
 
-  // console.log(csrfToken, 'token');
+  if (status === 'authenticated') {
+    router.replace('/home');
+  }
+
   return (
     <div className="index-page bg-gray-700 relative w-screen h-screen z-50">
       <Head>
@@ -76,32 +79,17 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
         <meta name="description" content="generate feed by yourself" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {status === 'authenticated' && (
+        <div className="fixed z-50 left-0 top-0 w-full h-full bg-black/50 flex items-center justify-center">
+          <Spinner color="red.500" />
+        </div>
+      )}
       <main className="container mx-auto h-screen flex items-center justify-center">
-        {data ? (
-          <Button
-            className="text-xs"
-            onClick={() => {
-              signOut();
-            }}
-          >
-            退出登录
-          </Button>
-        ) : (
+        {status === 'unauthenticated' && (
           <SignComponent providers={providers} csrfToken={csrfToken} />
         )}
-        {/* <form className="" onSubmit={() => signInHandler()}>
-          <input
-            type="text"
-            value={email}
-            onChange={(evt: ChangeEvent<HTMLInputElement>) =>
-              setEmail(evt.target.value)
-            }
-          />
-
-          <button type="submit">登录</button>
-        </form> */}
       </main>
-      {/* <footer className={styles.footer}></footer> */}
     </div>
   );
 };
