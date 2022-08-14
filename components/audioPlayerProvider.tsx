@@ -91,7 +91,6 @@ const AudioPlayer = forwardRef<any, any>(({ url }, ref) => {
       controls
       src={url}
       className="w-full"
-      autoPlay
       onPause={() => {
         setStatus('paused');
       }}
