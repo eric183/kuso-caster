@@ -58,8 +58,32 @@ const ContentLayout = styled.div`
     gap: 3.235%;
   }
 
+  h5 {
+    font-size: 14px;
+    text-align: left;
+    left: 17px;
+    top: 71.7391304347826%;
+    max-width: 66.23611111111111%;
+  }
+
   li {
     height: 11.5rem;
+  }
+
+  .background-color-mask {
+    position: absolute;
+    height: 50%;
+
+    bottom: 0;
+    left: 0;
+
+    background: linear-gradient(
+      180deg,
+      rgba(62, 62, 62, 0.0001) 0%,
+      #1e1e1e 85.15%
+    );
+    mix-blend-mode: normal;
+    opacity: 0.6;
   }
 `;
 const FeedContent = forwardRef<ContentType, any>((props, ref) => {
@@ -212,7 +236,7 @@ const Card: FC<{
   //   // createElement(motion.div);
   // };
   return (
-    <CardLayout className="transition relative overflow-hidden p-5 h-full w-full bmx-auto z-10 text-center">
+    <CardLayout className="transition relative overflow-hidden h-full w-full bmx-auto z-10 text-center">
       {/* <StarIcon favToggle={favToggle} /> */}
       <motion.img
         className="transition ease-in-out w-full h-full absolute right-0 top-0"
@@ -222,7 +246,7 @@ const Card: FC<{
       {/* <div className="absolute ease-in-out w-full h-full z-10 left-0 top-0"></div> */}
 
       <article
-        className="relative h-full w-full flex items-center justify-center cursor-pointer"
+        className="relative h-full w-full flex cursor-pointer"
         onClick={(event) => {
           event.stopPropagation();
           event.preventDefault();
@@ -230,9 +254,11 @@ const Card: FC<{
           setUrl(cardItem?.enclosure?.url);
         }}
       >
-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h5 className="text-white absolute tracking-tight z-10">
           {cardItem.title}
         </h5>
+
+        <i className="background-color-mask w-full h-3/6"></i>
       </article>
     </CardLayout>
   );
