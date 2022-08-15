@@ -63,7 +63,8 @@ const ContentLayout = styled.div`
     text-align: left;
     left: 17px;
     top: 71.7391304347826%;
-    max-width: 66.23611111111111%;
+    max-width: 66.236%;
+    line-height: 17px;
   }
 
   li {
