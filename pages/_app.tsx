@@ -29,17 +29,15 @@ function KusoCasterMain({ Component, pageProps }: AppProps) {
             subscribeDispatch: dispatch,
           }}
         >
-          <AudioPlayerProvider>
-            <>
-              <Component {...pageProps} />
+          <>
+            <Component {...pageProps} />
 
-              {/* {loading && (
+            {/* {loading && (
                 <div className="fixed top-0 left-0 w-full h-10">
-                  <Progress size="xs" isIndeterminate />
+                <Progress size="xs" isIndeterminate />
                 </div>
               )} */}
-            </>
-          </AudioPlayerProvider>
+          </>
         </SubscribeContext.Provider>
       </ChakraProvider>
     </SessionProvider>

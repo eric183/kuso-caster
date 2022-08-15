@@ -16,6 +16,7 @@ import {
 } from 'next-auth/react';
 import SignComponent from '~/components/sign';
 import { Button, Spinner } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 
 interface Credentials {
   id: string;
@@ -32,6 +33,41 @@ interface NextPageProps {
   };
   [key: string]: any;
 }
+
+const DescLayout = styled.div`
+  background-color: #ffe8db;
+  width: 28rem;
+  color: #df856a;
+  font-size: 24px;
+  padding: 2.65625rem 2.34375rem;
+  section:nth-of-type(1) {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 4px;
+    background-color: #fea675;
+  }
+
+  section:nth-of-type(2) {
+    margin: 2.5rem 0;
+  }
+
+  section:nth-of-type(3) {
+    width: 364px;
+    height: 408px;
+    left: 31px;
+    top: 206px;
+
+    background: #ffd3ba;
+    border-radius: 4px;
+  }
+
+  section:nth-of-type(4) {
+    position: absolute;
+    bottom: 2.34375rem;
+    font-size: 12px;
+  }
+`;
 
 const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
   const [feedURL, changeFeedUrl] = useState<string>('');
@@ -73,7 +109,7 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
   }
 
   return (
-    <div className="index-page bg-gray-700 relative w-screen h-screen z-50">
+    <div className="index-page relative w-screen h-screen z-50">
       <Head>
         <title>kuso feed</title>
         <meta name="description" content="generate feed by yourself" />
@@ -85,7 +121,19 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
           <Spinner color="red.500" />
         </div>
       )}
-      <main className="container mx-auto h-screen flex items-center justify-center">
+      <main className="w-screen h-screen  flex items-center justify-between mx-auto">
+        <DescLayout className="h-full relative">
+          <section></section>
+          <section>
+            <p>Halo!</p>
+            <p>To free rss feeding.</p>
+          </section>
+          <section></section>
+          <section>
+            <span>Design by sunday</span>
+          </section>
+        </DescLayout>
+
         {status === 'unauthenticated' && (
           <SignComponent providers={providers} csrfToken={csrfToken} />
         )}

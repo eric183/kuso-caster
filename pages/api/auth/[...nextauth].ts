@@ -40,16 +40,7 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        // let userInfo = await getSessionUser(req as NextApiRequest);
-
-        // const cookie = req!.headers!.cookie as string;
-        // let sessionToken = /next-auth\.session-token=(.+);?/.exec(cookie) as
-        //   | string[]
-        //   | string;
-        // sessionToken = sessionToken ? sessionToken[1] : '';
-
-        console.log(credentials, 'credentials');
-        // console.log(cookie, 'sessionToken');
+        // console.log(credentials, 'credentials');
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -60,12 +51,13 @@ export default NextAuth({
           })
         )[0];
 
-        // console.log(userInfo, 'userInfo');
+        // console.log(req);
         if (!userInfo) {
           userInfo = await sanityClient.create({
             _type: 'user',
             email,
             name: email,
+            password,
             feedIds: initFeedIDs,
             // session: {
             //   // sessionToken: sessionToken,
@@ -73,6 +65,12 @@ export default NextAuth({
             // },
           });
         } else {
+          if (userInfo.password !== password) {
+            return {
+              error: 'Password is incorrect',
+            };
+          }
+
           userInfo = sanityClient
             .patch(userInfo._id)
             .set({
@@ -94,7 +92,10 @@ export default NextAuth({
     // maxAge: 60,
   },
   callbacks: {
-    async signIn() {
+    async signIn({ user, credentials }) {
+      if (user.error) {
+        return credentials?.callbackUrl + '?error=' + user.error;
+      }
       return true;
     },
     async redirect({ baseUrl }) {
