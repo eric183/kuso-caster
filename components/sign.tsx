@@ -120,8 +120,8 @@ const SignComponent: FC<{
           </div>
           <input
             required
-            type="search"
-            id="search-login"
+            type="email"
+            id="email-search"
             className="block p-4 pl-10 w-full text-sm rounded-lg border"
             placeholder="Input Your Email"
             value={email}
@@ -167,8 +167,8 @@ const SignComponent: FC<{
           </div>
           <input
             required
-            type="search"
-            id="search-login"
+            type="password"
+            id="password"
             className="block p-4 pl-10 w-full text-sm rounded-lg border"
             placeholder="Input Your Password"
             value={password}
