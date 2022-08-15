@@ -8,10 +8,15 @@ import { FeedNav } from '~/components/feedNav';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { AudioPlayerProvider } from '~/components/audioPlayerProvider';
+import styled from '@emotion/styled';
 
 interface NextPageProps {
   feed: FeedType;
 }
+
+const HomeLayout = styled.div`
+  background-color: #f4f4f4;
+`;
 
 const Home: NextPage<NextPageProps> = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -30,41 +35,20 @@ const Home: NextPage<NextPageProps> = () => {
   }
 
   return (
-    <AudioPlayerProvider>
-      <div className="bg-gray-700 h-screen w-screen flex items-center justify-center flex-col">
-        <FeedInput
-          isOpen={isOpen}
-          onClose={() => setOpen(false)}
-          onSubscribe={(data) => {
-            console.log(data, 'subscribe');
-            changeSubscribeFeed(data);
-          }}
-        />
-        <header
-          className="w-full py-4 flex items-center justify-end border-b-2 border-gray-600"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setOpen(true);
-          }}
-        >
-          <motion.img
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              signOut();
-            }}
-            src="https://avatars.githubusercontent.com/u/10773980?s=40&v=4"
-            className="w-8 h-8 rounded-full bg-slate-100 ring-2 ring-white mr-8"
-          ></motion.img>
-        </header>
+    <HomeLayout className="h-screen w-screen grid grid-cols-10 gap-10 overflow-hidden">
+      <FeedInput
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        onSubscribe={(data) => {
+          console.log(data, 'subscribe');
+          changeSubscribeFeed(data);
+        }}
+      />
 
-        <main className="flex-1 w-full grid grid-cols-10 gap-10 overflow-hidden">
-          <FeedNav getRSSDocument={getRSSDocument} feed={subscribeFeed} />
-          <FeedContent ref={feedRef} />
-        </main>
-      </div>
-    </AudioPlayerProvider>
+      <FeedNav getRSSDocument={getRSSDocument} feed={subscribeFeed} />
+      <FeedContent ref={feedRef} />
+      {/* </main> */}
+    </HomeLayout>
   );
 };
 

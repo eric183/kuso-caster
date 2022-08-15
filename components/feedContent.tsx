@@ -17,10 +17,51 @@ import { omit } from 'lodash';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useloadingStore } from 'context/useLoading';
+import { AudioPlayerProvider } from './audioPlayerProvider';
+import styled from '@emotion/styled';
 export type ContentType = {
   getRSSDocument: (feedInfo: FeedType) => void;
 };
 
+const CardLayout = styled.div`
+  color: #1c1c1c;
+  border-radius: 30px;
+
+  /* height: 15rem; */
+`;
+
+const ContentLayout = styled.div`
+  padding: 3.125rem 2.75rem 0 4.5rem;
+
+  header {
+    color: #1c1c1c;
+  }
+
+  input {
+    background-color: #f1f1f1;
+    border-radius: 7px;
+    border: 0;
+    color: #1c1c1c;
+  }
+
+  h3:before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    bottom: -7px;
+    width: 4px;
+    height: 26px;
+    background: #1c1c1c;
+  }
+  ul {
+    grid-template-columns: 27.5fr 27.5fr 27.5fr;
+    gap: 3.235%;
+  }
+
+  li {
+    height: 11.5rem;
+  }
+`;
 const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const feed = useFeedStore((state) => state.feed);
   const setFeed = useFeedStore((state) => state.setFeed);
@@ -71,11 +112,11 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   }, []);
 
   return (
-    <div className="flex col-span-8 gap-8 flex-col overflow-hidden">
+    <ContentLayout className="relative flex col-span-8 gap-8 flex-col overflow-hidden bg-white">
       <header className="flex flex-row justify-between w-full mt-3 px-5 items-center">
-        <h3 className="text-slate-100 font-bold">{feed?.title}</h3>
+        <h3 className="relative font-bold">{feed?.title}</h3>
 
-        <div className="relative mr-40 w-80">
+        <div className="relative w-80">
           <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
             <svg
               aria-hidden="true"
@@ -97,7 +138,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
             required
             type="search"
             id="search"
-            className="block p-2 pl-10 pr-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2 pl-10 pr-5 w-full text-sm bg-gray-50 rounded-lg border"
             placeholder="Search Your Feed By Name"
             value={searchingValue}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +149,8 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
       </header>
 
       <ul
-        className="overflow-y-scroll flex-1 grid grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6 pb-20"
+        // grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6 pb-20
+        className="overflow-y-scroll flex-1 grid"
         ref={scrollRef}
       >
         {/* Card */}
@@ -122,7 +164,9 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
             </li>
           ))}
       </ul>
-    </div>
+
+      <AudioPlayerProvider />
+    </ContentLayout>
   );
 });
 
@@ -168,13 +212,13 @@ const Card: FC<{
   //   // createElement(motion.div);
   // };
   return (
-    <div className="transition relative overflow-hidden p-5 h-full w-full rounded-xl border-2 border-gray-600 bmx-auto z-10 text-center">
-      <StarIcon favToggle={favToggle} />
-      {/* <motion.img
-        className="transition ease-in-out w-full h-full absolute right-0 top-0 opacity-30 hover:opacity-100"
+    <CardLayout className="transition relative overflow-hidden p-5 h-full w-full bmx-auto z-10 text-center">
+      {/* <StarIcon favToggle={favToggle} /> */}
+      <motion.img
+        className="transition ease-in-out w-full h-full absolute right-0 top-0"
         src={cardItem?.itunes?.image}
         alt={cardItem?.itunes?.subtitle}
-      /> */}
+      />
       {/* <div className="absolute ease-in-out w-full h-full z-10 left-0 top-0"></div> */}
 
       <article
@@ -190,7 +234,7 @@ const Card: FC<{
           {cardItem.title}
         </h5>
       </article>
-    </div>
+    </CardLayout>
   );
 };
 
