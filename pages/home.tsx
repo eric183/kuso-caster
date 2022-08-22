@@ -24,6 +24,7 @@ const Home: NextPage<NextPageProps> = () => {
 
   const [subscribeFeed, changeSubscribeFeed] = useState<FeedType>(null!);
   const { data, status } = useSession();
+
   const router = useRouter();
 
   const getRSSDocument = (feedInfo: FeedType) => {
@@ -45,7 +46,11 @@ const Home: NextPage<NextPageProps> = () => {
         }}
       />
 
-      <FeedNav getRSSDocument={getRSSDocument} feed={subscribeFeed} />
+      <FeedNav
+        feed={subscribeFeed}
+        getRSSDocument={getRSSDocument}
+        setContentloading={feedRef.current?.setLoading}
+      />
       <FeedContent ref={feedRef} />
       {/* </main> */}
     </HomeLayout>

@@ -16,11 +16,13 @@ import { getFeed } from 'utils';
 import { omit } from 'lodash';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { useloadingStore } from 'context/useLoading';
 import { AudioPlayerProvider } from './audioPlayerProvider';
 import styled from '@emotion/styled';
+import { Box, Skeleton, Spinner, Stack } from '@chakra-ui/react';
+
 export type ContentType = {
   getRSSDocument: (feedInfo: FeedType) => void;
+  setLoading: (data: boolean) => void;
 };
 
 const CardLayout = styled.div`
@@ -93,7 +95,9 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const addItemToFeed = useFeedStore((state) => state.addItemToFeed);
   const setContentlist = useContentList((state) => state.setContentList);
   const contentList = useContentList((state) => state.contentList);
-  const setLoading = useloadingStore((state) => state.setLoading);
+  // const setLoading = useloadingStore((state) => state.setLoading);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const scrollRef = useRef(null);
 
@@ -119,6 +123,8 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
       ...currentFeed,
       items: JSON.parse(currentFeed.items as unknown as string),
     });
+
+    setLoading(false);
   };
 
   const getItemFromParent = (item: Item) => {
@@ -128,6 +134,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   useImperativeHandle(ref, () => ({
     getRSSDocument,
     getItemFromParent,
+    setLoading,
   }));
 
   useEffect(() => {
@@ -135,6 +142,10 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
       getRSSDocument(contentList);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
 
   return (
     <ContentLayout className="relative flex col-span-8 gap-8 flex-col overflow-hidden bg-white">
@@ -173,22 +184,40 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
         </div>
       </header>
 
-      <ul
-        // grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6 pb-20
-        className="overflow-y-scroll flex-1 grid"
-        ref={scrollRef}
-      >
-        {/* Card */}
-        {(feed?.items as Item[])
-          ?.filter((item: Item) =>
-            searchingValue.trim() ? item.title.includes(searchingValue) : true,
-          )
-          ?.map((item, index) => (
-            <li className="w-full mt-5 h-80" key={index}>
-              <Card cardItem={item} />
-            </li>
-          ))}
-      </ul>
+      {!loading ? (
+        <>
+          <ul
+            // grid-cols-3 grid-col gap-x-12 gap-y-6 pr-6 pb-20
+            className="overflow-y-scroll flex-1 grid"
+            ref={scrollRef}
+          >
+            {/* Card */}
+            {(feed?.items as Item[])
+              ?.filter((item: Item) =>
+                searchingValue.trim()
+                  ? item.title.includes(searchingValue)
+                  : true,
+              )
+              ?.map((item, index) => (
+                <li className="w-full mt-5 h-80" key={index}>
+                  <Card cardItem={item} />
+                </li>
+              ))}
+          </ul>
+        </>
+      ) : (
+        <ul className="overflow-y-scroll flex-1 grid">
+          {Array(6)
+            .fill(null)
+            .map((_, key) => (
+              <li className="w-full mt-5 h-80" key={key}>
+                <Skeleton height="100%" isLoaded={false}>
+                  <Box>hi</Box>
+                </Skeleton>
+              </li>
+            ))}
+        </ul>
+      )}
 
       <AudioPlayerProvider />
     </ContentLayout>
