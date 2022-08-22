@@ -128,9 +128,17 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
             <p>Halo!</p>
             <p>To free rss feeding.</p>
           </section>
-          <section></section>
           <section>
-            <span>Design by sunday</span>
+            <motion.img src="/login.jpg" />
+          </section>
+          <section>
+            <a
+            // className="cursor-pointer"
+            // target="__blank"
+            // href="https://baidu.com"
+            >
+              Design by Sunday Song
+            </a>
           </section>
         </DescLayout>
 
