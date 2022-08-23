@@ -19,7 +19,6 @@ function KusoCasterMain({ Component, pageProps }: AppProps) {
     useloadingStore.subscribe((data) => setLoading(data.loading));
   }, []);
 
-  // console.log(loading)
   return (
     <SessionProvider>
       <ChakraProvider>

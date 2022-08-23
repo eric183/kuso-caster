@@ -19,8 +19,6 @@ export default async function handler(
     itunes: JSON.stringify(feedInfo.itunes),
   })) as unknown as FeedType;
 
-  // console.log(resFeed, 'resFeed');
-
   await sanityClient
     .patch(user._id)
     .setIfMissing({ feedIds: [] })

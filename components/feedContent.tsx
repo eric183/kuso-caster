@@ -12,7 +12,7 @@ import {
   useState,
 } from 'react';
 import { FeedType, Item } from 'types/feed';
-import { getFeed } from 'utils';
+import { getFeed, storeItemsIntoDB } from 'utils';
 import { omit } from 'lodash';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -109,10 +109,29 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
     if (!currentFeed) {
       // setLoading(true);
 
-      console.log(process.env.NEXT_PUBLIC_PROXY_SERVER);
-      const { feedInfo, status } = (await getFeed(_feed.feedUrl, _feed)) as any;
+      const { data, status } = (await axios(
+        `/api/feed/items/${_feed._id}`,
+      )) as any;
 
-      currentFeed = feedInfo;
+      if (!data.feedItems) {
+        const { feedInfo, status } = (await getFeed(
+          _feed.feedUrl,
+          _feed,
+        )) as any;
+
+        currentFeed = feedInfo;
+
+        await axios('/api/feed/items/create', {
+          method: 'POST',
+          data: {
+            feed: currentFeed,
+          },
+        });
+      } else {
+        currentFeed = { ..._feed, items: data.feedItems };
+
+        storeItemsIntoDB(currentFeed);
+      }
 
       // loading
     }

@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { groq } from 'next-sanity';
 import { sanityClient } from 'sanity';
-import { FeedType } from 'types/feed';
 import { getSessionUser } from 'utils/getSessionUser';
 
 const feedRoq = groq`*[_type == "feed"]{
@@ -18,7 +17,6 @@ export default async function handler(
 ): Promise<void> {
   const user = await getSessionUser(req);
 
-  // console.log(req, 'list');
   if (!user) {
     res.status(200).send({ error: 'failed to load data' });
     return;
