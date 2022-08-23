@@ -1,15 +1,12 @@
-import { motion } from 'framer-motion';
 import { NextPage } from 'next';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FeedType } from 'types/feed';
 import { FeedInput } from '~/components/feedInput';
 import { ContentType, FeedContent } from '~/components/feedContent';
 import { FeedNav } from '~/components/feedNav';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { AudioPlayerProvider } from '~/components/audioPlayerProvider';
 import styled from '@emotion/styled';
-import { createClient, RedisClientType } from 'redis';
 
 interface NextPageProps {
   feed: FeedType;
@@ -22,7 +19,7 @@ const HomeLayout = styled.div`
 const Home: NextPage<NextPageProps> = () => {
   const feedRef = useRef<ContentType>(null);
   const router = useRouter();
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [subscribeFeed, changeSubscribeFeed] = useState<FeedType>(null!);
@@ -52,7 +49,6 @@ const Home: NextPage<NextPageProps> = () => {
         setContentloading={feedRef.current?.setLoading}
       />
       <FeedContent ref={feedRef} />
-      {/* </main> */}
     </HomeLayout>
   );
 };

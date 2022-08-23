@@ -95,7 +95,6 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
   const addItemToFeed = useFeedStore((state) => state.addItemToFeed);
   const setContentlist = useContentList((state) => state.setContentList);
   const contentList = useContentList((state) => state.contentList);
-  // const setLoading = useloadingStore((state) => state.setLoading);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -107,8 +106,6 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
     let currentFeed = (await db.feeds.get(_feed._id!)) as unknown as FeedType;
 
     if (!currentFeed) {
-      // setLoading(true);
-
       const { data, status } = (await axios(
         `/api/feed/items/${_feed._id}`,
       )) as any;
@@ -258,32 +255,6 @@ const Card: FC<{
     axios('/api/feed/addfavorite', {});
   };
 
-  // const activeCard = (evt: any) => {
-  //   console.log(evt);
-  //   const dom = evt.currentTarget.cloneNode(true);
-
-  //   dom.id = 'clone-dom';
-  //   dom.style.position = 'absolute';
-  //   dom.style.width = evt.currentTarget.clientWidth + 'px';
-  //   dom.style.height = evt.currentTarget.clientHeight + 'px';
-  //   dom.style.top = evt.currentTarget.top;
-  //   dom.style.left = evt.currentTarget.left;
-  //   dom.style.borderRadius = 0;
-  //   // dom.style.top = 0;
-  //   // dom.style.left = 0;
-  //   dom.style.zIndex = '9999';
-  //   dom.classList.add('duration-1000', 'bg-black');
-  //   dom.classList.remove('hover:bg-black/90', 'bg-black/50');
-
-  //   document.body.append(dom);
-  //   setTimeout(() => {
-  //     dom.style.width = '100%';
-  //     dom.style.height = '100%';
-  //     dom.style.left = 0;
-  //     dom.style.top = 0;
-  //   }, 200);
-  //   // createElement(motion.div);
-  // };
   return (
     <CardLayout className="transition relative overflow-hidden h-full w-full bmx-auto z-10 text-center">
       {/* <StarIcon favToggle={favToggle} /> */}

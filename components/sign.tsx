@@ -1,8 +1,6 @@
-// import { Alert, AlertIcon } from "@chakra-ui/react";
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import { GetServerSideProps } from 'next';
-import { getCsrfToken, getProviders, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FC, useState } from 'react';
 
@@ -37,7 +35,6 @@ const SignLayout = styled.form`
   }
 
   input {
-    /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
     border-color: transparent;
     background-color: #fff2ed;
   }
@@ -56,10 +53,10 @@ const SignLayout = styled.form`
 const SignComponent: FC<{
   providers: any;
   csrfToken: any;
-}> = ({ providers, csrfToken }) => {
+}> = ({ providers }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassWord] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [, setLoading] = useState<boolean>(false);
   const [signStatus, changeSignStatus] = useState<
     'ldle' | 'signing' | 'signed'
   >('ldle');

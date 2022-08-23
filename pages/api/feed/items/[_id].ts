@@ -8,10 +8,6 @@ export default async function handler(
   res: NextApiResponse,
 ): Promise<void> {
   const client = await createRedis();
-
-  console.log(req.query, '..........');
-  // req.query;
-
   const feedItems = (await client.get(
     req.query?._id as string,
   )) as unknown as Item[];

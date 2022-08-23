@@ -3,10 +3,8 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Spin } from './spin';
 import axios from 'axios';
-import Parser from 'rss-parser';
-import { FeedType } from 'types/feed';
+
 import { omit } from 'lodash';
-import { db } from 'context/db';
 import { getFeed, storeItemsIntoDB } from 'utils';
 interface NextPageProps {
   isOpen?: boolean;

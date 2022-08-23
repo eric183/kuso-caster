@@ -1,11 +1,9 @@
 import { Skeleton, Tooltip } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { SubscribeContext } from 'context/subscribe';
-import { useloadingStore } from 'context/useLoading';
 import { motion } from 'framer-motion';
 import { signOut } from 'next-auth/react';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FeedType } from 'types/feed';
 
 const NavLayour = styled.nav`
@@ -32,7 +30,6 @@ export const FeedNav: FC<{
 }> = ({ getRSSDocument, feed, setContentloading }) => {
   const [feeds, changeFeeds] = useState<FeedType[]>([]);
 
-  const { feedInfo } = useContext(SubscribeContext);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getFeedList = async () => {
@@ -63,8 +60,6 @@ export const FeedNav: FC<{
   }, []);
 
   useEffect(() => {
-    // console.log(feeds);
-
     if (feed) {
       changeFeeds(feeds.concat(feed));
     }
@@ -83,7 +78,6 @@ export const FeedNav: FC<{
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          // setOpen(true);
         }}
       >
         <motion.img
@@ -137,9 +131,3 @@ export const FeedNav: FC<{
     </NavLayour>
   );
 };
-
-// export const getServerSideProps = async (ctx) => {
-//   console.log(ctx);
-
-//   return {};
-// };

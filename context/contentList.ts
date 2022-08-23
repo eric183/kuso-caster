@@ -12,8 +12,7 @@ export const useContentList = create<{
     (set) => ({
       contentList: null,
       setContentList: (contentList: ContentType) =>
-        set((state) => ({ contentList })),
-      // set((state) => ({ ...state, contentList })),
+        set((_state) => ({ contentList })),
     }),
     {
       name: 'contentList',

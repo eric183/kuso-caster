@@ -1,7 +1,5 @@
-import { FeedType } from 'types/feed';
 import create from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
-// import type { PersistedState } from 'zustand/middleware/persist';
+import { persist } from 'zustand/middleware';
 
 interface PlayerType {
   [key: string]: any;

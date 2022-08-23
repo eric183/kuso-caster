@@ -1,5 +1,4 @@
 import Dexie, { Table } from 'dexie';
-import { FeedType } from 'types/feed';
 
 export interface Feed {
   id: string;

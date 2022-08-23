@@ -1,10 +1,8 @@
-// import { Alert, AlertIcon } from "@chakra-ui/react";
+import { motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
 import { getCsrfToken, getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-// import { Button } from '~/components/Button';
-// import styles from '../../../styles/Signin.module.css';
 
 interface Credentials {
   id: string;
@@ -24,7 +22,7 @@ export default function SignIn({
   [key: string]: any;
 }) {
   const [email, setEmail] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const goSignIn = async (providers: { credentials: Credentials }) => {
     setLoading(true);
@@ -52,21 +50,9 @@ export default function SignIn({
 
   return (
     <div style={{ overflow: 'hidden', position: 'relative' }}>
-      {/* <Alert status="info" className="z-50">
-        <AlertIcon />
-        Chakra is going live on August 30th. Get ready!
-      </Alert> */}
-      {/* <Header /> */}
       <div className={'bg-slate-400'} />
       <div className="">
         <div className="">
-          {/* <Image
-            src="/katalog_full.svg"
-            width="196px"
-            height="64px"
-            alt="App Logo"
-            style={{ height: "85px", marginBottom: "20px" }}
-          /> */}
           <form
             className=""
             onSubmit={(evt) => {
@@ -86,27 +72,16 @@ export default function SignIn({
               onKeyDown={(evt) => {
                 if (evt.key === 'Enter') {
                   goSignIn(providers);
-
-                  // signIn(providers.credentials.id, { email });
                 }
               }}
             />
 
             <button type="submit">登录</button>
             <hr />
-            {/* {providers &&
-              Object.values(providers).map((provider) => (
-                <div key={provider.name} style={{ marginBottom: 0 }}>
-                  <button onClick={() => signIn(provider.id, { email })}>
-                    登录
-                  </button>
-                </div>
-              ))} */}
           </form>
         </div>
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/dragon.jpg" alt="Pattern Background" className="" />
+      <motion.img src="/dragon.jpg" alt="Pattern Background" className="" />
     </div>
   );
 }

@@ -1,17 +1,14 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getFeed } from 'utils';
 import { FeedType } from 'types/feed';
 import { motion } from 'framer-motion';
-import { FeedInput } from '~/components/feedInput';
 import { useRouter } from 'next/router';
 import {
   getCsrfToken,
   getProviders,
   signIn,
-  signOut,
   useSession,
 } from 'next-auth/react';
 import SignComponent from '~/components/sign';
@@ -90,14 +87,7 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
   }, [feed]);
 
   useEffect(() => {
-    // router.replace('/home');
-    // console.log(sessionInfo);
-    // if (!data) {
-    //   signIn();
-    //   // router.replace('/auth/signin');
-    // }
     if (data) {
-      // router.replace('/home');
       signIn();
     }
   }, []);

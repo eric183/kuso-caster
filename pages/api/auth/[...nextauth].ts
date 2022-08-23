@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-// import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { sanityClient } from 'sanity';
 import { groq } from 'next-sanity';
 const query = groq`*[_type == "user" && email == $email]`;
@@ -75,10 +74,6 @@ export default NextAuth({
             .patch(userInfo._id)
             .set({
               role: 'user',
-              // session: {
-              //   // sessionToken: sessionToken,
-              //   expiresAt: expireTime(),
-              // },
             })
             .commit();
         }
@@ -102,46 +97,14 @@ export default NextAuth({
       return baseUrl;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      // console.log(token, 'jwt.token');
-      // console.log(user, 'jwt.user');
-      // console.log(account, 'jwt.account');
-      // console.log(profile, 'jwt.profile');
-      // console.log(isNewUser, 'jwt.isNewUser');
-
-      // if (account) {
-      //   token.accessToken = account.access_token;
-
-      //   // if (token.accessToken) {
-      //   //   console.log(token, '........++');
-      //   //   sanityClient
-      //   //     .patch(userInfo._id)
-      //   //     .set({
-      //   //       role: 'user',
-      //   //       session: {
-      //   //         sessionToken: sessionToken,
-      //   //         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      //   //       },
-      //   //     })
-      //   //     .commit();
-      //   // }
-      // }
       return token;
     },
     async session({ session, token, user }) {
       session.accessToken = token.accessToken;
-
-      // console.log(user, 'session.user');
-      // console.log(session, 'session.session');
-      // console.log(token, 'session.token');
       return session;
     },
   },
   pages: {
-    // signIn: '/auth/signin',
     signIn: '/',
-    // signOut: "/auth/signout",
-    // error: "/auth/error", // Error code passed in query string as ?error=
-    // verifyRequest: "/auth/verify-request", // (used for check email message)
-    // newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
   },
 });

@@ -8,15 +8,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import dynamic from 'next/dynamic';
-import { ForwardRefComponent } from 'framer-motion';
 
 const RssPlayerLayout = styled.div`
   left: 0;
   height: 50px;
 `;
 
-export const AudioPlayerProvider: FC<{}> = ({}) => {
+export const AudioPlayerProvider = () => {
   const [audioRender, setAudioRender] = useState<boolean>(false);
   const url = usePlayerStore((state) => state.url);
   useEffect(() => {
