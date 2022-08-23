@@ -110,6 +110,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
         `/api/feed/items/${_feed._id}`,
       )) as any;
 
+      // check whether the redis cache exist
       if (!data.feedItems) {
         const { feedInfo, status } = (await getFeed(
           _feed.feedUrl,
@@ -126,7 +127,6 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
         });
       } else {
         currentFeed = { ..._feed, items: data.feedItems };
-
         storeItemsIntoDB(currentFeed);
       }
 
