@@ -121,7 +121,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
 
         currentFeed = feedInfo;
 
-        await axios('/api/feed/items/create', {
+        axios('/api/feed/items/create', {
           method: 'POST',
           data: {
             feed: currentFeed,
