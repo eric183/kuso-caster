@@ -223,7 +223,7 @@ const FeedContent = forwardRef<ContentType, any>((props, ref) => {
         </>
       ) : (
         <ul className="overflow-y-scroll flex-1 grid">
-          {Array(6)
+          {Array(12)
             .fill(null)
             .map((_, key) => (
               <li className="w-full mt-5 h-80" key={key}>
