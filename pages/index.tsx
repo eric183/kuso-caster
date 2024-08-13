@@ -82,9 +82,9 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
     // });
   };
 
-  useEffect(() => {
-    console.log(feed);
-  }, [feed]);
+  // useEffect(() => {
+  //   console.log(feed);
+  // }, [feed]);
 
   useEffect(() => {
     if (data) {
@@ -92,7 +92,7 @@ const Index: NextPage<NextPageProps> = ({ feed, providers, csrfToken }) => {
     }
   }, []);
 
-  console.log(data, status);
+  // console.log(data, status);
 
   if (status === 'authenticated') {
     router.replace('/home');

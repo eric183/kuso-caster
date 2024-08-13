@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ethers } from 'ethers';
 import { motion } from 'framer-motion';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -182,6 +183,28 @@ const SignComponent: FC<{
         className="text-white"
       >
         Sign In
+      </motion.button>
+
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        className="text-white"
+        onClick={async () => {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+          // MetaMask requires requesting permission to connect users accounts
+          await provider.send('eth_requestAccounts', []);
+
+          // The MetaMask plugin also allows signing transactions to
+          // send ether and pay to change state within the blockchain.
+          // For this, you need the account signer...
+          const signer = provider.getSigner();
+          console.log('Account:', await signer.getAddress());
+
+          // console.log(signer);
+          // signer._address
+        }}
+      >
+        Sign In \w MetaMask
       </motion.button>
     </SignLayout>
   );

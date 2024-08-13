@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
+
 export interface FeedType {
   copyright: Copyright;
   description: string;

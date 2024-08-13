@@ -55,7 +55,6 @@ const FeedInput: FC<NextPageProps> = ({ isOpen, onClose, onSubscribe }) => {
   };
 
   const subscribeFeed = async () => {
-    // debugger;
     if (feedExist) {
       onClose && onClose();
       return;
